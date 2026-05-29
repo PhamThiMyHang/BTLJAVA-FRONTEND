@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="215" height="48" viewBox="0 0 215 48" fill="none">
+  <defs>
+    <linearGradient id="pawGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FF8A3D"/>
+      <stop offset="100%" stop-color="#E85D2F"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(6 6)">
+    <circle cx="18" cy="18" r="18" fill="url(#pawGrad)"/>
+    <g fill="#FFFFFF" transform="translate(18 18)">
+      <ellipse cx="0" cy="3.2" rx="5.2" ry="4.2"/>
+      <ellipse cx="-6.8" cy="-2.4" rx="2.4" ry="3.2" transform="rotate(-20)"/>
+      <ellipse cx="-2.6" cy="-6.8" rx="2.2" ry="3" transform="rotate(-8)"/>
+      <ellipse cx="2.6" cy="-6.8" rx="2.2" ry="3" transform="rotate(8)"/>
+      <ellipse cx="6.8" cy="-2.4" rx="2.4" ry="3.2" transform="rotate(20)"/>
+    </g>
+  </g>
+  <text x="52" y="28" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="22" font-weight="700" fill="#1F2937" letter-spacing="-0.5">
+    Pawfect
+  </text>
+  <text x="138" y="28" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="22" font-weight="500" fill="#E85D2F" letter-spacing="-0.3">
+    Shop
+  </text>
+  <text x="52" y="41" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="8" font-weight="500" fill="#6B7280" letter-spacing="2.2">
+    LOVE • CARE • PLAY
+  </text>
+</svg>

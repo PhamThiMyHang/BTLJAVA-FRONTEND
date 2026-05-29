@@ -1,0 +1,271 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import Header from '@/components/header';
+import Footer from '@/components/footer';
+import { Button } from '@/components/ui/button';
+import { Star, ShoppingCart, Heart, Share2 } from 'lucide-react';
+import Link from 'next/link';
+import { isAuthenticated, getCurrentUser } from '@/lib/auth'; // Import các hàm auth
+import { gioHangService } from '@/services/gioHangService'; // Import gioHangService
+
+export default function ProductDetailPage() {
+  const params = useParams();
+  const router = useRouter();
+  const productId = params?.id as string;
+  const [product, setProduct] = useState<any>(null);
+  const [relatedProducts, setRelatedProducts] = useState<any[]>([]);
+  const [quantity, setQuantity] = useState(1);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch product by ID
+  useEffect(() => {
+    if (!productId) return;
+
+    fetch(`http://localhost:8080/api/san-pham/${productId}`)
+      .then(res => res.json())
+      .then(result => {
+        const item = result.data;
+
+        const mapped = {
+          id: item.maSP,
+          name: item.tenSP,
+          price: item.gia,
+          quantity: item.soLuong,
+          shelf: item.viTri,
+          rating: 4.5
+        };
+
+        setProduct(mapped);
+        setLoading(false);
+      })
+      .catch(err => console.error("Lỗi API:", err));
+  }, [productId]);
+
+  // Fetch related products (same shelf)
+  useEffect(() => {
+    if (!product) return;
+
+    fetch("http://localhost:8080/api/san-pham")
+      .then(res => res.json())
+      .then(result => {
+        const mapped = result.data.map((item: any) => ({
+          id: item.maSP,
+          name: item.tenSP,
+          price: item.gia,
+          quantity: item.soLuong,
+          shelf: item.viTri,
+          rating: 4.5
+        }));
+
+        const related = mapped
+          .filter((p: any) => p.shelf === product.shelf && p.id !== product.id)
+          .slice(0, 4);
+
+        setRelatedProducts(related);
+      });
+  }, [product]);
+
+  if (loading || !product) {
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  }
+
+  // Hàm xử lý thêm vào giỏ hàng thông qua kết nối API Backend
+  const handleAddToCart = async () => {
+    if (!isAuthenticated()) {
+      alert('Vui lòng đăng nhập để thực hiện tính năng này!');
+      router.push('/login'); 
+      return;
+    }
+
+    if (quantity > product.quantity) {
+      alert('Số lượng chọn vượt quá số lượng còn lại trong kho!');
+      return;
+    }
+
+    try {
+      // Lấy thông tin user đang đăng nhập
+      const user = getCurrentUser() as any;
+      if (!user || !user.userID) {
+        alert('Không tìm thấy thông tin người dùng. Vui lòng đăng nhập lại!');
+        return;
+      }
+
+      // Thiết lập cấu trúc dữ liệu gửi lên API
+      // SỬA TẠI ĐÂY: Đồng bộ tên thuộc tính giống hệt phía trên
+        const cartPayload = {
+          maGioHang: null,
+          maUser: String(user.userID),
+          maSP: String(product.id), 
+          soLuong: quantity            // Số lượng lấy theo state tùy chọn của người dùng
+        };
+
+      // Gọi service để lưu bản ghi mới xuống database Backend
+      await gioHangService.save(cartPayload);
+
+      // Kích hoạt cập nhật số giỏ hàng trên Header ngay tại thời điểm thực thi
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new Event('storage'));
+        window.dispatchEvent(new Event('cartUpdate'));
+      }
+
+      alert('Sản phẩm đã được thêm vào giỏ hàng thành công!');
+    } catch (error) {
+      console.error("Lỗi khi thêm giỏ hàng từ chi tiết sản phẩm:", error);
+      alert('Có lỗi xảy ra khi thêm vào giỏ hàng. Vui lòng thử lại!');
+    }
+  };
+
+  const isOutOfStockLimit = quantity >= product.quantity;
+
+  return (
+    <div className="min-h-screen bg-white flex flex-col">
+      <Header />
+      <main className="flex-1">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          {/* Breadcrumb */}
+          <div className="flex items-center gap-2 mb-8 text-sm">
+            <Link href="/" className="text-orange-600 hover:text-orange-700">Trang chủ</Link>
+            <span>/</span>
+            <Link href="/products" className="text-orange-600 hover:text-orange-700">Sản phẩm</Link>
+            <span>/</span>
+            <span className="text-gray-600">{product.name}</span>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-12 mb-16">
+            <div>
+              <div className="bg-gray-200 rounded-lg h-96 flex items-center justify-center text-6xl mb-4">
+                📦
+              </div>
+            </div>
+
+            <div>
+              <div className="mb-4">
+                <span className="inline-block px-3 py-1 bg-orange-100 text-orange-600 text-sm font-semibold rounded-full mb-4">
+                  {product.shelf}
+                </span>
+              </div>
+
+              <h1 className="text-4xl font-bold text-gray-900 mb-4">{product.name}</h1>
+
+              <div className="flex items-center gap-2 mb-6">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                ))}
+                <span className="text-gray-600">{product.rating} / 5</span>
+              </div>
+
+              <div className="mb-6">
+                <p className="text-gray-600 text-lg mb-4">{product.description}</p>
+              </div>
+
+              <div className="mb-6">
+                <p className="text-sm text-gray-600">
+                  Kho hàng:{' '}
+                  <span className={product.quantity > 0 ? 'text-green-600 font-semibold' : 'text-red-600 font-semibold'}>
+                    {product.quantity > 0 ? `${product.quantity} sản phẩm` : 'Hết hàng'}
+                  </span>
+                </p>
+              </div>
+
+              <div className="text-4xl font-bold text-orange-600 mb-8">
+                {(product.price * 1000).toLocaleString("vi-VN")}đ
+              </div>
+
+              <div className="space-y-4 mb-8">
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center border border-gray-300 rounded-lg">
+                    <button
+                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                      className="px-4 py-2 text-gray-600 hover:text-gray-900"
+                    >
+                      −
+                    </button>
+                    <span className="px-6 py-2 font-semibold">{quantity}</span>
+                    <button
+                      onClick={() => {
+                        if (!isOutOfStockLimit) {
+                          setQuantity(quantity + 1);
+                        }
+                      }}
+                      className={`px-4 py-2 text-gray-600 hover:text-gray-900 ${isOutOfStockLimit ? 'opacity-30 cursor-not-allowed' : ''}`}
+                      disabled={isOutOfStockLimit}
+                    >
+                      +
+                    </button>
+                  </div>
+                  <Button
+                    onClick={handleAddToCart}
+                    className={`flex-1 text-white font-semibold py-3 flex items-center justify-center gap-2 transition-colors ${
+                      isOutOfStockLimit 
+                        ? 'bg-orange-300 cursor-not-allowed hover:bg-orange-300' 
+                        : 'bg-orange-600 hover:bg-orange-700'
+                    }`}
+                    disabled={isOutOfStockLimit}
+                  >
+                    <ShoppingCart className="w-5 h-5" />
+                    Thêm vào giỏ hàng
+                  </Button>
+                </div>
+
+                <div className="flex gap-4">
+                  <Button variant="outline" className="flex-1 flex items-center justify-center gap-2">
+                    <Heart className="w-5 h-5" /> Yêu thích
+                  </Button>
+                  <Button variant="outline" className="flex-1 flex items-center justify-center gap-2">
+                    <Share2 className="w-5 h-5" /> Chia sẻ
+                  </Button>
+                </div>
+              </div>
+
+              <div className="border-t pt-6 space-y-3">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-600">Mã sản phẩm:</span>
+                  <span className="font-semibold text-gray-900">{product.id}</span>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-600">Loại:</span>
+                  <span className="font-semibold text-gray-900">{product.shelf}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Related Products */}
+          {relatedProducts.length > 0 && (
+            <section>
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">Sản phẩm liên quan</h2>
+              <div className="grid md:grid-cols-4 gap-6">
+                {relatedProducts.map((rel) => (
+                  <Link key={rel.id} href={`/products/${rel.id}`}>
+                    <div className="bg-white border rounded-lg overflow-hidden hover:shadow-lg transition cursor-pointer h-full">
+                      <div className="bg-gray-200 h-48 flex items-center justify-center text-4xl">
+                        📦
+                      </div>
+                      <div className="p-4">
+                        <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2">
+                          {rel.name}
+                        </h3>
+                        <div className="flex items-center justify-between mb-4">
+                          <span className="text-lg font-bold text-orange-600">
+                            {rel.price}K
+                          </span>
+                          <div className="flex items-center gap-1">
+                            <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                            <span className="text-sm text-gray-600">{rel.rating}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          )}
+        </div>
+      </main>
+      <Footer />
+    </div>
+  );
+}
