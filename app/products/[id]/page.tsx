@@ -9,8 +9,10 @@ import { Star, ShoppingCart, Heart, Share2 } from 'lucide-react';
 import Link from 'next/link';
 import { isAuthenticated, getCurrentUser } from '@/lib/auth'; // Import các hàm auth
 import { gioHangService } from '@/services/gioHangService'; // Import gioHangService
+import { useTranslation } from 'react-i18next';
 
 export default function ProductDetailPage() {
+  const { t } = useTranslation();
   const params = useParams();
   const router = useRouter();
   const productId = params?.id as string;
@@ -68,19 +70,19 @@ export default function ProductDetailPage() {
   }, [product]);
 
   if (loading || !product) {
-    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+    return <div className="min-h-screen flex items-center justify-center">{t('common.loading.default')}</div>;
   }
 
   // Hàm xử lý thêm vào giỏ hàng thông qua kết nối API Backend
   const handleAddToCart = async () => {
     if (!isAuthenticated()) {
-      alert('Vui lòng đăng nhập để thực hiện tính năng này!');
+      alert(t('common.messages.loginRequired'));
       router.push('/login'); 
       return;
     }
 
     if (quantity > product.quantity) {
-      alert('Số lượng chọn vượt quá số lượng còn lại trong kho!');
+      alert(t('productDetail.quantityLimit'));
       return;
     }
 
@@ -88,7 +90,7 @@ export default function ProductDetailPage() {
       // Lấy thông tin user đang đăng nhập
       const user = getCurrentUser() as any;
       if (!user || !user.userID) {
-        alert('Không tìm thấy thông tin người dùng. Vui lòng đăng nhập lại!');
+        alert(t('products.messages.missingUser'));
         return;
       }
 
@@ -110,10 +112,10 @@ export default function ProductDetailPage() {
         window.dispatchEvent(new Event('cartUpdate'));
       }
 
-      alert('Sản phẩm đã được thêm vào giỏ hàng thành công!');
+      alert(t('common.messages.addProductSuccess'));
     } catch (error) {
       console.error("Lỗi khi thêm giỏ hàng từ chi tiết sản phẩm:", error);
-      alert('Có lỗi xảy ra khi thêm vào giỏ hàng. Vui lòng thử lại!');
+      alert(t('products.messages.addError'));
     }
   };
 
@@ -126,9 +128,9 @@ export default function ProductDetailPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           {/* Breadcrumb */}
           <div className="flex items-center gap-2 mb-8 text-sm">
-            <Link href="/" className="text-orange-600 hover:text-orange-700">Trang chủ</Link>
+            <Link href="/" className="text-orange-600 hover:text-orange-700">{t('productDetail.home')}</Link>
             <span>/</span>
-            <Link href="/products" className="text-orange-600 hover:text-orange-700">Sản phẩm</Link>
+            <Link href="/products" className="text-orange-600 hover:text-orange-700">{t('common.nav.products')}</Link>
             <span>/</span>
             <span className="text-gray-600">{product.name}</span>
           </div>
@@ -162,15 +164,15 @@ export default function ProductDetailPage() {
 
               <div className="mb-6">
                 <p className="text-sm text-gray-600">
-                  Kho hàng:{' '}
+                  {t('productDetail.stock')}{' '}
                   <span className={product.quantity > 0 ? 'text-green-600 font-semibold' : 'text-red-600 font-semibold'}>
-                    {product.quantity > 0 ? `${product.quantity} sản phẩm` : 'Hết hàng'}
+                    {product.quantity > 0 ? t('productDetail.stockCount', { count: product.quantity }) : t('productDetail.outOfStock')}
                   </span>
                 </p>
               </div>
 
               <div className="text-4xl font-bold text-orange-600 mb-8">
-                {(product.price * 1000).toLocaleString("vi-VN")}đ
+                {(product.price * 1000).toLocaleString(t('common.currency.locale'))}{t('common.currency.suffix')}
               </div>
 
               <div className="space-y-4 mb-8">
@@ -205,27 +207,27 @@ export default function ProductDetailPage() {
                     disabled={isOutOfStockLimit}
                   >
                     <ShoppingCart className="w-5 h-5" />
-                    Thêm vào giỏ hàng
+                    {t('common.actions.addToCart')}
                   </Button>
                 </div>
 
                 <div className="flex gap-4">
                   <Button variant="outline" className="flex-1 flex items-center justify-center gap-2">
-                    <Heart className="w-5 h-5" /> Yêu thích
+                    <Heart className="w-5 h-5" /> {t('productDetail.favorite')}
                   </Button>
                   <Button variant="outline" className="flex-1 flex items-center justify-center gap-2">
-                    <Share2 className="w-5 h-5" /> Chia sẻ
+                    <Share2 className="w-5 h-5" /> {t('productDetail.share')}
                   </Button>
                 </div>
               </div>
 
               <div className="border-t pt-6 space-y-3">
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-600">Mã sản phẩm:</span>
+                  <span className="text-gray-600">{t('productDetail.productCode')}</span>
                   <span className="font-semibold text-gray-900">{product.id}</span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-600">Loại:</span>
+                  <span className="text-gray-600">{t('productDetail.type')}</span>
                   <span className="font-semibold text-gray-900">{product.shelf}</span>
                 </div>
               </div>
@@ -235,7 +237,7 @@ export default function ProductDetailPage() {
           {/* Related Products */}
           {relatedProducts.length > 0 && (
             <section>
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Sản phẩm liên quan</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('productDetail.related')}</h2>
               <div className="grid md:grid-cols-4 gap-6">
                 {relatedProducts.map((rel) => (
                   <Link key={rel.id} href={`/products/${rel.id}`}>

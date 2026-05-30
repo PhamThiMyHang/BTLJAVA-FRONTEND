@@ -5,6 +5,7 @@ import Header from '@/components/header';
 import Footer from '@/components/footer';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { useTranslation } from 'react-i18next';
 
 // Import các hàm gọi API 
 import { petService } from '@/services/petService';         
@@ -12,6 +13,7 @@ import { khachHangService } from '@/services/khachHangService';
 import { nhanVienService } from '@/services/nhanVienService';   
 
 export default function AboutPage() {
+  const { t } = useTranslation();
   
   // Quản lý trạng thái các con số thống kê
   const [stats, setStats] = useState({
@@ -83,10 +85,10 @@ export default function AboutPage() {
         <section className="bg-gradient-to-r from-orange-50 to-orange-100 py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Về Cửa Hàng Thú Cưng
+              {t('about.title')}
             </h1>
             <p className="text-gray-600 text-lg">
-              Tìm hiểu về chúng tôi và hành trình chăm sóc thú cưng chuyên nghiệp
+              {t('about.description')}
             </p>
           </div>
         </section>
@@ -99,15 +101,14 @@ export default function AboutPage() {
              
                 <img 
                   src="\pet-banner.png" 
-                  alt="Chó và mèo" 
+                  alt={t('about.imageAlt')}
                   className="h-64 w-auto object-contain rounded-lg"
                 />
               </div>
               <div>
-                <h2 className="text-3xl font-bold text-gray-900 mb-4">Câu chuyện của chúng tôi</h2>
+                <h2 className="text-3xl font-bold text-gray-900 mb-4">{t('about.storyTitle')}</h2>
                 <p className="text-gray-600 mb-4 text-lg leading-relaxed">
-                  Hệ thống được thành lập với mục đích mang đến những giải pháp lưu trú chất lượng cao 
-                  và dịch vụ quản lý chuồng trại chuyên nghiệp cho các thú cưng.
+                  {t('about.storyText')}
                 </p>
               </div>
             </div>
@@ -118,12 +119,12 @@ export default function AboutPage() {
         <section className="py-16 md:py-24 bg-gray-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">
-              Đội ngũ của chúng tôi
+              {t('about.teamTitle')}
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               
               {loading ? (
-                <div className="col-span-4 text-center text-gray-500 py-4">Đang tải danh sách nhân sự...</div>
+                <div className="col-span-4 text-center text-gray-500 py-4">{t('about.teamLoading')}</div>
               ) : teamMembers.length > 0 ? (
                 teamMembers.map((member, index) => (
                   <Link
@@ -137,12 +138,12 @@ export default function AboutPage() {
                       {member?.chucVu === 'ADMIN' ? '👨‍💼' : member?.chucVu === 'KTV' ? '👩‍⚕️' : '👩‍💼'}
                     </div>
                     {/* Hiển thị chính xác tên nhân viên (tenNV) và chức vụ (chucVu) */}
-                    <h3 className="text-lg font-semibold text-gray-900">{member?.tenNV || "Chưa rõ tên"}</h3>
-                    <p className="text-orange-600 text-sm font-medium mt-1">{member?.chucVu || "Chưa rõ chức vụ"}</p>
+                    <h3 className="text-lg font-semibold text-gray-900">{member?.tenNV || t('common.fallbacks.unknownName')}</h3>
+                    <p className="text-orange-600 text-sm font-medium mt-1">{member?.chucVu || t('common.fallbacks.unknownRole')}</p>
                   </Link>
                 ))
               ) : (
-                <div className="col-span-4 text-center text-gray-500 py-4">Chưa có thông tin nhân viên</div>
+                <div className="col-span-4 text-center text-gray-500 py-4">{t('about.teamEmpty')}</div>
               )}
 
             </div>
@@ -157,26 +158,26 @@ export default function AboutPage() {
                 <div className="text-4xl font-bold mb-2">
                   {loading ? '...' : `${stats.totalCustomers}+`}
                 </div>
-                <p className="text-orange-100">Khách hàng tin tưởng</p>
+                <p className="text-orange-100">{t('about.stats.customers')}</p>
               </div>
               <div>
                 <div className="text-4xl font-bold mb-2">
                   {loading ? '...' : stats.totalPets}
                 </div>
-                <p className="text-orange-100">Thú cưng hệ thống</p>
+                <p className="text-orange-100">{t('about.stats.pets')}</p>
               </div>
               <div>
                 <div className="text-4xl font-bold mb-2">
                   {loading ? '...' : stats.totalCages}
                 </div>
-                <p className="text-orange-100">Chuồng nuôi hiện đại</p>
+                <p className="text-orange-100">{t('about.stats.cages')}</p>
               </div>
               <div>
                 <div className="text-4xl font-bold mb-2">
                   {/* Hiển thị con số 12 lấy từ API Summary */}
                   {loading ? '...' : stats.totalStaff}
                 </div>
-                <p className="text-orange-100">Nhân viên chuyên nghiệp</p>
+                <p className="text-orange-100">{t('about.stats.staff')}</p>
               </div>
             </div>
           </div>
@@ -186,12 +187,12 @@ export default function AboutPage() {
         <section className="py-16 md:py-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-3xl font-bold text-gray-900 mb-6">
-              Bắt đầu trải nghiệm hệ thống quản lý
+              {t('about.ctaTitle')}
             </h2>
             <div className="flex gap-4 justify-center">
               <Link href="/dashboard">
                 <Button className="bg-orange-600 hover:bg-orange-700 px-8">
-                  Đi tới Dashboard
+                  {t('about.goDashboard')}
                 </Button>
               </Link>
             </div>

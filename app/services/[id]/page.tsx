@@ -9,9 +9,10 @@ import { Star, Clock, Calendar, ArrowLeft, Heart, Share2, ShoppingCart } from 'l
 import Link from 'next/link';
 import { dichVuService } from '@/services/dichVuService';
 import { getCurrentUser } from '@/lib/auth';
+import { useTranslation } from 'react-i18next';
 
 // === HÀM FORMAT GIÁ ĐÃ SỬA ===
-const formatPrice = (gia: number | string): string => {
+const formatPrice = (gia: number | string, locale: string): string => {
   const num = Number(gia || 0);
   
   if (num === 0) return '0K';
@@ -20,10 +21,11 @@ const formatPrice = (gia: number | string): string => {
     return Math.round(num) + 'K';
   }
 
-  return Math.round(num / 1000).toLocaleString('vi-VN') + 'K';
+  return Math.round(num / 1000).toLocaleString(locale) + 'K';
 };
 
 export default function ServiceDetailPage() {
+  const { t } = useTranslation();
   const params = useParams();
   const router = useRouter();
   const maDV = params?.id as string;
@@ -44,7 +46,7 @@ export default function ServiceDetailPage() {
         setService(serviceData);
       } catch (err: any) {
         console.error(err);
-        setError('Không tìm thấy dịch vụ.');
+        setError(t('serviceDetail.notFound'));
       } finally {
         setLoading(false);
       }
@@ -56,7 +58,7 @@ export default function ServiceDetailPage() {
   const handleAddToCart = () => {
     const currentUser = getCurrentUser();
     if (!currentUser) {
-      alert("Vui lòng đăng nhập để đặt dịch vụ!");
+      alert(t('serviceDetail.loginRequired'));
       router.push('/login');
       return;
     }
@@ -81,12 +83,12 @@ export default function ServiceDetailPage() {
 
     setAddedToCart(true);
     setTimeout(() => {
-      alert(`✅ Đã thêm "${service.tenDV}" vào giỏ hàng!`);
+      alert(t('serviceDetail.added', { name: service.tenDV }));
       setAddedToCart(false);
     }, 600);
   };
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center text-2xl">Đang tải...</div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center text-2xl">{t('common.loading.default')}</div>;
 
   if (error || !service) {
     return (
@@ -107,8 +109,8 @@ export default function ServiceDetailPage() {
       <main className="flex-1">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="flex items-center gap-2 mb-8 text-sm text-gray-500">
-            <Link href="/" className="hover:text-orange-600">Trang chủ</Link> /
-            <Link href="/services" className="hover:text-orange-600">Dịch vụ</Link> /
+            <Link href="/" className="hover:text-orange-600">{t('productDetail.home')}</Link> /
+            <Link href="/services" className="hover:text-orange-600">{t('common.nav.services')}</Link> /
             <span className="text-gray-900 font-medium">{service.tenDV}</span>
           </div>
 
@@ -126,13 +128,13 @@ export default function ServiceDetailPage() {
 
             <div className="space-y-8">
               <span className="inline-block px-5 py-2 bg-orange-100 text-orange-700 font-semibold rounded-full">
-                {service.category?.toUpperCase() || 'DỊCH VỤ'}
+                {service.category?.toUpperCase() || t('serviceDetail.serviceFallback')}
               </span>
 
               <h1 className="text-5xl font-bold text-gray-900">{service.tenDV}</h1>
 
               <div className="text-5xl font-bold text-orange-600">
-                {formatPrice(service.gia)}
+                {formatPrice(service.gia, t('common.currency.locale'))}
               </div>
 
               <div className="prose text-gray-600 text-lg">
@@ -145,12 +147,12 @@ export default function ServiceDetailPage() {
                 className="w-full bg-orange-600 hover:bg-orange-700 text-white text-xl py-7 rounded-2xl flex items-center justify-center gap-3"
               >
                 <ShoppingCart className="w-6 h-6" />
-                {addedToCart ? 'Đang thêm...' : 'THÊM VÀO GIỎ HÀNG'}
+                {addedToCart ? t('serviceDetail.adding') : t('serviceDetail.addToCart')}
               </Button>
 
               <Link href="/services">
                 <Button variant="outline" className="w-full py-6 text-lg">
-                  <ArrowLeft className="mr-2" /> Quay lại danh sách dịch vụ
+                  <ArrowLeft className="mr-2" /> {t('serviceDetail.backToServices')}
                 </Button>
               </Link>
             </div>

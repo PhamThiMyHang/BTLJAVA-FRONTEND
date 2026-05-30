@@ -9,6 +9,7 @@ import { Package, Truck, DollarSign, TrendingUp } from 'lucide-react';
 import { donHangService } from '@/services/donHangService';
 import { getCurrentUser } from '@/lib/auth';
 import { User } from '@/lib/mock-data';
+import { useTranslation } from 'react-i18next';
 
 interface DonHang {
   id: string | number;
@@ -24,6 +25,7 @@ interface DonHang {
 }
 
 export default function StaffDashboard() {
+  const { t } = useTranslation();
   const router = useRouter();
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [orders, setOrders] = useState<DonHang[]>([]);
@@ -61,7 +63,7 @@ export default function StaffDashboard() {
   if (loading || !currentUser) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p>Đang tải dữ liệu...</p>
+        <p>{t('common.loading.data')}</p>
       </div>
     );
   }
@@ -101,18 +103,18 @@ export default function StaffDashboard() {
   const getStatusLabel = (status?: string) => {
     const st = (status || '').toUpperCase();
     const labels: Record<string, string> = {
-      PENDING: 'Chờ xử lý',
-      PROCESSING: 'Đang xử lý',
-      SHIPPING: 'Đang vận chuyển',
-      COMPLETED: 'Đã giao',
-      CANCELLED: 'Đã hủy',
-      pending: 'Chờ xử lý',
-      confirmed: 'Đã xác nhận',
-      shipping: 'Đang vận chuyển',
-      delivered: 'Đã giao',
-      cancelled: 'Đã hủy',
+      PENDING: t('dashboard.staff.pending'),
+      PROCESSING: t('common.status.processing'),
+      SHIPPING: t('dashboard.staff.shipping'),
+      COMPLETED: t('dashboard.staff.delivered'),
+      CANCELLED: t('common.status.cancelled'),
+      pending: t('dashboard.staff.pending'),
+      confirmed: t('common.status.confirmed'),
+      shipping: t('dashboard.staff.shipping'),
+      delivered: t('dashboard.staff.delivered'),
+      cancelled: t('common.status.cancelled'),
     };
-    return labels[st] || status || 'Không xác định';
+    return labels[st] || status || t('common.status.unknown');
   };
 
   const handleUpdateStatus = async (orderId: string | number, newStatus: string) => {
@@ -130,10 +132,10 @@ export default function StaffDashboard() {
       await fetchOrders();
       setSelectedOrder(null);
       
-      alert('Cập nhật trạng thái đơn hàng thành công!');
+      alert(t('dashboard.staff.updateSuccess'));
     } catch (error) {
       console.error('Lỗi cập nhật trạng thái:', error);
-      alert('Có lỗi xảy ra khi cập nhật trạng thái');
+      alert(t('dashboard.staff.updateError'));
     } finally {
       setUpdating(false);
     }
@@ -148,7 +150,7 @@ export default function StaffDashboard() {
         <section className="bg-white border-b">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <h1 className="text-3xl font-bold text-gray-900">Staff Dashboard</h1>
-            <p className="text-gray-600 mt-2">Quản lý đơn hàng và bán hàng</p>
+            <p className="text-gray-600 mt-2">{t('dashboard.staff.subtitle')}</p>
           </div>
         </section>
 
@@ -157,10 +159,10 @@ export default function StaffDashboard() {
           {/* Stats */}
           <div className="grid md:grid-cols-4 gap-6 mb-12">
             {[
-              { icon: <Package className="w-6 h-6" />, label: 'Tổng đơn hàng', value: totalOrders, color: 'bg-blue-100 text-blue-600' },
-              { icon: <Truck className="w-6 h-6" />, label: 'Chờ xử lý', value: pendingOrders, color: 'bg-yellow-100 text-yellow-600' },
-              { icon: <DollarSign className="w-6 h-6" />, label: 'Đang vận chuyển', value: shippingOrders, color: 'bg-purple-100 text-purple-600' },
-              { icon: <TrendingUp className="w-6 h-6" />, label: 'Đã giao', value: deliveredOrders, color: 'bg-green-100 text-green-600' },
+              { icon: <Package className="w-6 h-6" />, label: t('dashboard.staff.totalOrders'), value: totalOrders, color: 'bg-blue-100 text-blue-600' },
+              { icon: <Truck className="w-6 h-6" />, label: t('dashboard.staff.pending'), value: pendingOrders, color: 'bg-yellow-100 text-yellow-600' },
+              { icon: <DollarSign className="w-6 h-6" />, label: t('dashboard.staff.shipping'), value: shippingOrders, color: 'bg-purple-100 text-purple-600' },
+              { icon: <TrendingUp className="w-6 h-6" />, label: t('dashboard.staff.delivered'), value: deliveredOrders, color: 'bg-green-100 text-green-600' },
             ].map((stat, index) => (
               <div key={index} className={`${stat.color} rounded-lg p-6`}>
                 <div className="mb-2">{stat.icon}</div>
@@ -174,20 +176,20 @@ export default function StaffDashboard() {
           <div className="bg-white border rounded-lg p-6 mb-12">
             <div className="flex items-center gap-2 mb-4">
               <DollarSign className="w-6 h-6 text-orange-600" />
-              <h2 className="text-xl font-bold text-gray-900">Tổng doanh thu</h2>
+              <h2 className="text-xl font-bold text-gray-900">{t('dashboard.revenue')}</h2>
             </div>
             <p className="text-4xl font-bold text-orange-600">
-              {Math.floor(totalRevenue / 1000).toLocaleString('vi-VN')}K VND
+              {Math.floor(totalRevenue / 1000).toLocaleString(t('common.currency.locale'))}K VND
             </p>
-            <p className="text-gray-600 mt-2">Từ {totalOrders} đơn hàng</p>
+            <p className="text-gray-600 mt-2">{t('dashboard.fromOrders', { count: totalOrders })}</p>
           </div>
 
           {/* Orders Management */}
           <div className="bg-white border rounded-lg p-6">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold text-gray-900">Danh sách đơn hàng</h2>
+              <h2 className="text-xl font-bold text-gray-900">{t('dashboard.staff.orderList')}</h2>
               <Button onClick={fetchOrders} variant="outline" size="sm">
-                Làm mới
+                {t('dashboard.staff.refresh')}
               </Button>
             </div>
 
@@ -195,12 +197,12 @@ export default function StaffDashboard() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b">
-                    <th className="text-left py-3 px-4 font-semibold text-gray-900">Đơn hàng</th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-900">Khách hàng</th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-900">Tổng tiền</th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-900">Trạng thái</th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-900">Ngày</th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-900">Hành động</th>
+                    <th className="text-left py-3 px-4 font-semibold text-gray-900">{t('dashboard.orders.order')}</th>
+                    <th className="text-left py-3 px-4 font-semibold text-gray-900">{t('dashboard.staff.customer')}</th>
+                    <th className="text-left py-3 px-4 font-semibold text-gray-900">{t('dashboard.orders.total')}</th>
+                    <th className="text-left py-3 px-4 font-semibold text-gray-900">{t('common.fields.status')}</th>
+                    <th className="text-left py-3 px-4 font-semibold text-gray-900">{t('dashboard.staff.date')}</th>
+                    <th className="text-left py-3 px-4 font-semibold text-gray-900">{t('dashboard.staff.action')}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -210,7 +212,7 @@ export default function StaffDashboard() {
                         #{order.maDH || order.id}
                       </td>
                       <td className="py-3 px-4">
-                        {order.tenKhachHang || order.customerId || 'Khách lẻ'}
+                        {order.tenKhachHang || order.customerId || t('dashboard.staff.walkIn')}
                       </td>
                       <td className="py-3 px-4 font-semibold text-orange-600">
                         {((order.tongTien || order.totalPrice || 0) / 1000).toFixed(0)}K
@@ -221,7 +223,7 @@ export default function StaffDashboard() {
                         </span>
                       </td>
                       <td className="py-3 px-4 text-gray-600">
-                        {new Date(order.ngayTao || order.createdAt || Date.now()).toLocaleDateString('vi-VN')}
+                        {new Date(order.ngayTao || order.createdAt || Date.now()).toLocaleDateString(t('common.currency.locale'))}
                       </td>
                       <td className="py-3 px-4">
                         <Button
@@ -229,7 +231,7 @@ export default function StaffDashboard() {
                           variant="outline"
                           onClick={() => setSelectedOrder(order)}
                         >
-                          Cập nhật
+                          {t('dashboard.staff.update')}
                         </Button>
                       </td>
                     </tr>
@@ -244,10 +246,10 @@ export default function StaffDashboard() {
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
               <div className="bg-white rounded-lg p-8 max-w-md w-full">
                 <h3 className="text-xl font-bold text-gray-900 mb-4">
-                  Cập nhật trạng thái đơn hàng
+                  {t('dashboard.staff.updateStatus')}
                 </h3>
                 <p className="text-gray-600 mb-6">
-                  Đơn hàng #{selectedOrder.maDH || selectedOrder.id}
+                  {t('dashboard.orders.order')} #{selectedOrder.maDH || selectedOrder.id}
                 </p>
 
                 <div className="space-y-2 mb-6">
@@ -273,7 +275,7 @@ export default function StaffDashboard() {
                   onClick={() => setSelectedOrder(null)}
                   disabled={updating}
                 >
-                  Đóng
+                  {t('common.actions.close')}
                 </Button>
               </div>
             </div>

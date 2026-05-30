@@ -7,18 +7,10 @@ import { Filter, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { dichVuService } from '@/services/dichVuService';
-
-const categoryLabels: any = {
-  'TatCa': 'Tất cả',
-  'Grooming': 'Grooming & Chăm sóc lông',
-  'Spa': 'Spa & Thư giãn',
-  'Hotel': 'Khách sạn thú cưng',
-  'Healthcare': 'Chăm sóc sức khỏe',
-  'Training': 'Huấn luyện & Giáo dục',
-};
+import { useTranslation } from 'react-i18next';
 
 // === HÀM FORMAT GIÁ ĐÃ SỬA ===
-const formatPrice = (gia: number | string): string => {
+const formatPrice = (gia: number | string, locale: string): string => {
   const num = Number(gia || 0);
   
   if (num === 0) return '0K';
@@ -29,7 +21,7 @@ const formatPrice = (gia: number | string): string => {
   }
 
   // Giá lớn (ví dụ: 1.200.000) → chia 1000
-  return Math.round(num / 1000).toLocaleString('vi-VN') + 'K';
+  return Math.round(num / 1000).toLocaleString(locale) + 'K';
 };
 
 // Hàm tự động phân loại dịch vụ dựa trên tên
@@ -64,6 +56,7 @@ const getCategoryFromName = (tenDV: string): string => {
 };
 
 export default function ServicesPage() {
+  const { t } = useTranslation();
   const [services, setServices] = useState<any[]>([]);
   const [filteredServices, setFilteredServices] = useState<any[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('TatCa');
@@ -85,7 +78,7 @@ export default function ServicesPage() {
         setServices(processedServices);
         setFilteredServices(processedServices);
       } catch (err: any) {
-        setError('Không thể tải danh sách dịch vụ.');
+        setError(t('servicesPage.loadError'));
         console.error(err);
       } finally {
         setLoading(false);
@@ -106,7 +99,7 @@ export default function ServicesPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-2xl">Đang tải dịch vụ...</div>
+        <div className="text-2xl">{t('common.loading.services')}</div>
       </div>
     );
   }
@@ -118,9 +111,9 @@ export default function ServicesPage() {
       <main className="flex-1">
         <section className="bg-gradient-to-br from-orange-50 via-white to-orange-50 py-20 border-b">
           <div className="max-w-7xl mx-auto px-4 text-center">
-            <h1 className="text-5xl font-bold text-gray-900 mb-6">Dịch vụ Thú Cưng</h1>
+            <h1 className="text-5xl font-bold text-gray-900 mb-6">{t('servicesPage.title')}</h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Những dịch vụ chuyên nghiệp và tận tâm nhất cho thú cưng của bạn
+              {t('servicesPage.description')}
             </p>
           </div>
         </section>
@@ -132,7 +125,7 @@ export default function ServicesPage() {
               <div className="bg-white border border-gray-200 rounded-3xl p-6 sticky top-24 shadow-sm">
                 <div className="flex items-center gap-3 mb-6">
                   <Filter className="w-6 h-6 text-orange-600" />
-                  <h2 className="text-2xl font-semibold text-gray-900">Danh mục</h2>
+                  <h2 className="text-2xl font-semibold text-gray-900">{t('servicesPage.category')}</h2>
                 </div>
 
                 <div className="space-y-2">
@@ -142,7 +135,7 @@ export default function ServicesPage() {
                       selectedCategory === 'TatCa' ? 'bg-orange-600 text-white shadow' : 'hover:bg-gray-100'
                     }`}
                   >
-                    Tất cả
+                    {t('servicesPage.categories.TatCa')}
                   </button>
 
                   {['Grooming', 'Spa', 'Hotel', 'Healthcare', 'Training'].map((cat) => (
@@ -153,7 +146,7 @@ export default function ServicesPage() {
                         selectedCategory === cat ? 'bg-orange-600 text-white shadow' : 'hover:bg-gray-100'
                       }`}
                     >
-                      {categoryLabels[cat]}
+                      {t(`servicesPage.categories.${cat}`)}
                     </button>
                   ))}
                 </div>
@@ -188,7 +181,7 @@ export default function ServicesPage() {
                         <div className="md:col-span-8 flex flex-col justify-between">
                           <div>
                             <span className="inline-block px-4 py-1 bg-orange-100 text-orange-700 text-sm font-semibold rounded-full mb-3">
-                              {categoryLabels[service.category] || 'Dịch vụ'}
+                              {t(`servicesPage.categories.${service.category}`, t('servicesPage.serviceFallback'))}
                             </span>
 
                             <h3 className="text-3xl font-bold text-gray-900 mb-4 group-hover:text-orange-600 transition-colors">
@@ -203,13 +196,13 @@ export default function ServicesPage() {
                           <div className="flex items-end justify-between pt-6 border-t">
                             <div>
                               <span className="text-4xl font-bold text-orange-600">
-                                {formatPrice(service.gia)}
+                                {formatPrice(service.gia, t('common.currency.locale'))}
                               </span>
                             </div>
 
                             <Link href={`/services/${service.maDV}`}>
                               <Button className="bg-orange-600 hover:bg-orange-700 text-white px-8 py-6 text-lg rounded-2xl flex items-center gap-3">
-                                Đặt ngay
+                                {t('common.actions.bookNow')}
                                 <ArrowRight className="w-5 h-5" />
                               </Button>
                             </Link>
@@ -220,7 +213,7 @@ export default function ServicesPage() {
                   ))
                 ) : (
                   <div className="text-center py-20 bg-gray-50 rounded-3xl">
-                    <p className="text-2xl text-gray-500">Không tìm thấy dịch vụ nào trong danh mục này</p>
+                    <p className="text-2xl text-gray-500">{t('servicesPage.empty')}</p>
                   </div>
                 )}
               </div>

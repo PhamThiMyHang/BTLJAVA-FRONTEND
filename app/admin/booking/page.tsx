@@ -7,6 +7,7 @@ import Footer from '@/components/footer';
 import { ArrowUpDown, Search } from 'lucide-react';
 import { getCurrentUser } from '@/lib/auth';
 import { User } from '@/lib/mock-data';
+import { useTranslation } from 'react-i18next';
 
 type Booking = {
   id: number;
@@ -25,6 +26,7 @@ type SortField =
   | 'bookingTime';
 
 export default function BookingManagementPage() {
+  const { t } = useTranslation();
   const router = useRouter();
 
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -61,7 +63,7 @@ export default function BookingManagementPage() {
         );
 
         if (!response.ok) {
-          throw new Error('Không thể lấy dữ liệu');
+          throw new Error(t('dashboard.adminBooking.fetchError'));
         }
 
         const data = await response.json();
@@ -120,7 +122,7 @@ export default function BookingManagementPage() {
   }, [bookings, search, sortField, sortOrder]);
 
   const formatDateTime = (date: string) => {
-    return new Date(date).toLocaleString('vi-VN', {
+    return new Date(date).toLocaleString(t('common.currency.locale'), {
       day: '2-digit',
       month: '2-digit',
       year: 'numeric',
@@ -151,16 +153,16 @@ export default function BookingManagementPage() {
   const getStatusText = (status: string) => {
     switch (status) {
       case 'pending':
-        return 'Chờ xác nhận';
+        return t('common.status.pending');
 
       case 'confirmed':
-        return 'Đã xác nhận';
+        return t('common.status.confirmed');
 
       case 'completed':
-        return 'Hoàn thành';
+        return t('common.status.completed');
 
       case 'cancelled':
-        return 'Đã hủy';
+        return t('common.status.cancelled');
 
       default:
         return status;
@@ -170,7 +172,7 @@ export default function BookingManagementPage() {
   if (loading || !currentUser) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        Loading...
+        {t('common.loading.default')}
       </div>
     );
   }
@@ -184,11 +186,11 @@ export default function BookingManagementPage() {
         <section className="bg-white border-b">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <h1 className="text-3xl font-bold text-gray-900">
-              Quản lý lịch hẹn
+              {t('dashboard.adminBooking.title')}
             </h1>
 
             <p className="text-gray-600 mt-2">
-              Theo dõi và quản lý tất cả lịch hẹn dịch vụ
+              {t('dashboard.adminBooking.subtitle')}
             </p>
           </div>
         </section>
@@ -201,7 +203,7 @@ export default function BookingManagementPage() {
             
               <input
                 type="text"
-                placeholder="Tìm theo khách hàng, pet, nhân viên..."
+                placeholder={t('dashboard.adminBooking.searchPlaceholder')}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
@@ -227,7 +229,7 @@ export default function BookingManagementPage() {
                         }
                         className="flex items-center gap-1 font-semibold hover:text-orange-600"
                       >
-                        Khách hàng
+                        {t('common.fields.customer')}
                         <ArrowUpDown className="w-4 h-4" />
                       </button>
                     </th>
@@ -240,14 +242,14 @@ export default function BookingManagementPage() {
                         }
                         className="flex items-center gap-1 font-semibold hover:text-orange-600"
                       >
-                        Tên Pet
+                        {t('dashboard.adminBooking.petName')}
                         <ArrowUpDown className="w-4 h-4" />
                       </button>
                     </th>
 
                     {/* Service */}
                     <th className="px-5 py-4 text-left font-semibold">
-                      Dịch vụ
+                      {t('common.fields.service')}
                     </th>
 
                     {/* Staff */}
@@ -258,7 +260,7 @@ export default function BookingManagementPage() {
                         }
                         className="flex items-center gap-1 font-semibold hover:text-orange-600"
                       >
-                        Nhân viên phụ trách
+                        {t('dashboard.adminBooking.assignedStaff')}
                         <ArrowUpDown className="w-4 h-4" />
                       </button>
                     </th>
@@ -271,14 +273,14 @@ export default function BookingManagementPage() {
                         }
                         className="flex items-center gap-1 font-semibold hover:text-orange-600"
                       >
-                        Thời gian
+                        {t('dashboard.adminBooking.time')}
                         <ArrowUpDown className="w-4 h-4" />
                       </button>
                     </th>
 
                     {/* Status */}
                     <th className="px-5 py-4 text-center font-semibold">
-                      Trạng thái
+                      {t('common.fields.status')}
                     </th>
                   </tr>
                 </thead>
@@ -335,7 +337,7 @@ export default function BookingManagementPage() {
                         colSpan={7}
                         className="text-center py-10 text-gray-500"
                       >
-                        Không có dữ liệu lịch hẹn
+                        {t('dashboard.adminBooking.empty')}
                       </td>
                     </tr>
                   )}

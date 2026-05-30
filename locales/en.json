@@ -1,0 +1,514 @@
+{
+  "common": {
+    "brand": "PetShop",
+    "language": {
+      "label": "Language",
+      "vi": "Vietnamese",
+      "en": "English"
+    },
+    "nav": {
+      "products": "Products",
+      "services": "Services",
+      "pets": "Pets",
+      "about": "About us",
+      "cart": "Cart",
+      "dashboard": "Dashboard"
+    },
+    "auth": {
+      "login": "Log in",
+      "register": "Register",
+      "logout": "Log out"
+    },
+    "actions": {
+      "back": "Back",
+      "close": "Close",
+      "details": "Details",
+      "save": "Save changes",
+      "cancel": "Cancel",
+      "search": "Search",
+      "viewAll": "View all",
+      "shopNow": "Shop now",
+      "exploreNow": "Explore now",
+      "bookNow": "Book now",
+      "addToCart": "Add to cart",
+      "addCart": "Add to cart"
+    },
+    "status": {
+      "all": "All",
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "inProgress": "In progress",
+      "completed": "Completed",
+      "cancelled": "Cancelled",
+      "processing": "Processing",
+      "shipping": "Shipping",
+      "unknown": "Unknown"
+    },
+    "fields": {
+      "service": "Service",
+      "pet": "Pet",
+      "schedule": "Schedule",
+      "price": "Price",
+      "status": "Status",
+      "notes": "Notes",
+      "customer": "Customer",
+      "employee": "Employee",
+      "phone": "Phone",
+      "address": "Address",
+      "email": "Email",
+      "password": "Password",
+      "fullName": "Full name",
+      "role": "Role"
+    },
+    "loading": {
+      "default": "Loading...",
+      "products": "Loading products...",
+      "services": "Loading services...",
+      "data": "Loading data..."
+    },
+    "currency": {
+      "suffix": "VND",
+      "locale": "en-US"
+    },
+    "fallbacks": {
+      "qualityProduct": "High-quality product",
+      "unknownName": "Unknown name",
+      "unknownRole": "Unknown role",
+      "none": "None",
+      "notUpdated": "Not updated"
+    },
+    "messages": {
+      "loginRequired": "Please log in to use this feature!",
+      "addProductSuccess": "Product added to cart successfully!",
+      "genericError": "Something went wrong. Please try again!"
+    }
+  },
+  "footer": {
+    "description": "A leading pet store offering high-quality products and professional services.",
+    "products": {
+      "food": "Food",
+      "toys": "Toys",
+      "cage": "Cages",
+      "hygiene": "Hygiene"
+    },
+    "services": {
+      "hotel": "Pet hotel",
+      "healthcare": "Healthcare"
+    },
+    "contact": {
+      "title": "Contact",
+      "address": "Address: 123 Nguyen Hue, District 1, HCMC",
+      "phone": "Phone:",
+      "hours": "Opening hours: 8:00 - 21:00"
+    },
+    "copyright": "© 2026 PetShop. All rights reserved.",
+    "privacy": "Privacy policy",
+    "terms": "Terms of use"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "The page you are looking for may have been removed or the address is incorrect.",
+    "home": "Go home",
+    "products": "View products"
+  },
+  "home": {
+    "hero": {
+      "title": "Welcome to PetShop",
+      "description": "A leading pet store offering high-quality products, grooming, spa, and professional pet hotel services.",
+      "shop": "Shop now",
+      "services": "View services"
+    },
+    "featuredProducts": {
+      "title": "Featured products",
+      "description": "The most loved high-quality products",
+      "viewAll": "View all products"
+    },
+    "featuredServices": {
+      "title": "Featured services",
+      "description": "Professional services for your pets",
+      "viewAll": "View all services"
+    },
+    "why": {
+      "title": "Why choose PetShop?",
+      "items": [
+        { "title": "High quality", "desc": "The best products and services" },
+        { "title": "Professional staff", "desc": "A well-trained team" },
+        { "title": "Competitive prices", "desc": "The best prices on the market" },
+        { "title": "24/7 support", "desc": "Customer service is always ready" }
+      ]
+    },
+    "cta": {
+      "title": "Start shopping today"
+    }
+  },
+  "products": {
+    "title": "Products",
+    "description": "Explore a collection of high-quality products for your pets",
+    "category": "Category",
+    "all": "All",
+    "searchPlaceholder": "Search products...",
+    "stock": "{{count}} in stock",
+    "empty": "No products found in this category",
+    "defaultShelf": "Default",
+    "messages": {
+      "missingUser": "User information was not found. Please log in again!",
+      "addError": "Could not add this item to the cart. Please try again!"
+    }
+  },
+  "servicesPage": {
+    "title": "Pet Services",
+    "description": "Professional and caring services for your pets",
+    "category": "Category",
+    "serviceFallback": "Service",
+    "loadError": "Could not load the service list.",
+    "empty": "No services found in this category",
+    "categories": {
+      "TatCa": "All",
+      "Grooming": "Grooming & coat care",
+      "Spa": "Spa & relaxation",
+      "Hotel": "Pet hotel",
+      "Healthcare": "Healthcare",
+      "Training": "Training & education"
+    }
+  },
+  "authPages": {
+    "login": {
+      "title": "Log in",
+      "subtitle": "Log in to your account",
+      "emailPlaceholder": "Enter your email",
+      "passwordPlaceholder": "Enter your password",
+      "loading": "Logging in...",
+      "invalid": "Email or password is incorrect!",
+      "noAccount": "Don't have an account?",
+      "registerNow": "Register now",
+      "demoAccounts": "Demo accounts:"
+    },
+    "register": {
+      "title": "Register",
+      "subtitle": "Create a new account to start shopping",
+      "nameLabel": "Full name *",
+      "emailLabel": "Email *",
+      "phoneLabel": "Phone *",
+      "addressLabel": "Address",
+      "passwordLabel": "Password *",
+      "confirmPasswordLabel": "Confirm password *",
+      "namePlaceholder": "Enter your name",
+      "emailPlaceholder": "Enter your email",
+      "phonePlaceholder": "Enter your phone number",
+      "addressPlaceholder": "Enter your address",
+      "passwordPlaceholder": "Enter password (minimum 6 characters)",
+      "confirmPasswordPlaceholder": "Re-enter password",
+      "loading": "Registering...",
+      "passwordMismatch": "Passwords do not match!",
+      "passwordMin": "Password must be at least 6 characters!",
+      "registerFailed": "Registration failed!",
+      "registerSuccess": "Registration successful!",
+      "hasAccount": "Already have an account?"
+    },
+    "genericError": "Something went wrong. Please try again!"
+  },
+  "cart": {
+    "title": "Cart",
+    "loading": "Loading products from your cart...",
+    "quantity": "Quantity: x{{count}}",
+    "lineTotal": "Line total: {{amount}}",
+    "removeTitle": "Remove this product",
+    "backToShop": "Back to the store to find more products",
+    "summary": "Order summary",
+    "subtotal": "Product subtotal",
+    "shippingFee": "Shipping fee",
+    "total": "Total amount due",
+    "checkoutInfo": "Enter shipping information",
+    "shippingAddress": "Shipping address",
+    "addressPlaceholder": "House number, street, ward, district...",
+    "paymentMethod": "Payment method",
+    "payment": {
+      "cash": "Cash on delivery (COD)",
+      "bank": "Bank transfer",
+      "card": "Credit / international card"
+    },
+    "confirmOrder": "Confirm order now",
+    "backToReview": "Back to product review",
+    "emptyTitle": "Your cart is empty",
+    "emptyDescription": "You have not added any products or pets to your cart yet. Go back to the store and choose something.",
+    "startShopping": "Start shopping now",
+    "messages": {
+      "removeError": "Could not remove the product from your cart. Please try again!",
+      "addressRequired": "Please provide a shipping address!",
+      "emptyCart": "Your cart is currently empty!"
+    }
+  },
+  "about": {
+    "title": "About The Pet Store",
+    "description": "Learn about us and our professional pet care journey",
+    "imageAlt": "Dog and cat",
+    "storyTitle": "Our story",
+    "storyText": "The system was created to provide high-quality boarding solutions and professional cage management services for pets.",
+    "teamTitle": "Our team",
+    "teamLoading": "Loading staff list...",
+    "teamEmpty": "No staff information available",
+    "stats": {
+      "customers": "Trusted customers",
+      "pets": "Pets in the system",
+      "cages": "Modern cages",
+      "staff": "Professional staff"
+    },
+    "ctaTitle": "Start using the management system",
+    "goDashboard": "Go to Dashboard"
+  },
+  "petsPage": {
+    "title": "Pet care guide",
+    "description": "Useful tips to care for your pets",
+    "tipsTitle": "Care tips:",
+    "viewCareServices": "View care services",
+    "healthTitle": "What to know about pet health",
+    "ctaTitle": "Let us help you care for your pets",
+    "ctaDescription": "Professional care services from experts",
+    "exploreServices": "Explore services",
+    "buyProducts": "Buy products",
+    "galleryTitle": "Adorable pet moments",
+    "galleryDescription": "Little companions bring joy and positive energy every day",
+    "guides": [
+      {
+        "name": "Dogs",
+        "description": "Loyal and cheerful companions",
+        "tips": ["Need regular exercise", "Eat nutrient-rich food", "Bathe and brush regularly", "Get regular health checks"]
+      },
+      {
+        "name": "Cats",
+        "description": "Independent city companions",
+        "tips": ["Need space to play", "Clean the litter box regularly", "Groom several times a week", "Keep them safe indoors"]
+      },
+      {
+        "name": "Birds",
+        "description": "Smart and cheerful friends",
+        "tips": ["Need a spacious cage to fly", "Eat seeds and fresh vegetables", "Enjoy social interaction", "Need sound stimulation"]
+      },
+      {
+        "name": "Rabbits",
+        "description": "Gentle and lovable companions",
+        "tips": ["Need a spacious cage", "Eat hay and leafy greens", "Need time to play outside", "Clean the cage daily"]
+      }
+    ],
+    "healthTips": [
+      { "title": "Regular vaccination", "description": "Protects pets from dangerous infectious diseases" },
+      { "title": "Regular health checks", "description": "Detects potential health issues early" },
+      { "title": "Balanced nutrition", "description": "Provides all essential nutrients for pets" },
+      { "title": "Regular exercise", "description": "Helps pets maintain a healthy weight and condition" },
+      { "title": "Personal hygiene", "description": "Bathe, brush, and trim nails regularly" },
+      { "title": "Love and attention", "description": "Spend time playing and bonding with your pets" }
+    ]
+  },
+  "privacy": {
+    "title": "Privacy policy",
+    "introTitle": "1. Introduction",
+    "introText": "PetShop respects and is committed to protecting customer privacy. This privacy policy explains how we collect, use, disclose, and protect your personal information.",
+    "infoTitle": "2. Information we collect",
+    "infoItems": ["Full name, email, phone number, shipping address", "Pet information: name, species, age, health", "Order history and payment methods", "Automatic information: IP, browser, access time"],
+    "purposeTitle": "3. How we use information",
+    "purposeItems": ["Process orders and provide services", "Send notifications and order confirmations", "Improve user experience", "Analyze website usage behavior", "Comply with legal requirements"],
+    "securityTitle": "4. Information security",
+    "securityText": "We apply strong technical and organizational security measures to protect your personal information. However, no system is completely secure.",
+    "rightsTitle": "5. Your rights",
+    "rightsItems": ["Access and receive a copy of your personal information", "Request correction or deletion of information", "Withdraw consent for data processing", "Complain about how we process data"],
+    "contactTitle": "Contact us",
+    "address": "123 Nguyen Hue, District 1<br />Ho Chi Minh City"
+  },
+  "termsPage": {
+    "title": "Terms of use",
+    "acceptTitle": "1. Acceptance of terms",
+    "acceptText": "By accessing and using the PetShop website, you agree to comply with and be bound by these Terms of Use. If you do not agree, please do not use our services.",
+    "accountTitle": "2. User accounts",
+    "accountItems": ["You must provide accurate and complete information when registering.", "You are responsible for keeping your account and password secure.", "PetShop is not responsible for any losses caused by disclosure of your account information."],
+    "paymentTitle": "3. Ordering and payment",
+    "paymentText": "All orders are confirmed only when we receive full payment. We reserve the right to reject or cancel orders if fraud or inaccurate information is detected.",
+    "refundTitle": "4. Refund and return policy",
+    "refundText": "Products damaged or defective due to shipping may be returned or exchanged within 7 days. Completed services are not refundable unless the issue is caused by PetShop.",
+    "responsibilityTitle": "5. User responsibilities",
+    "responsibilityText": "You agree not to use the website for illegal actions, harmful behavior, or anything that affects the rights of PetShop and third parties.",
+    "liabilityTitle": "6. Limitation of liability",
+    "liabilityText": "PetShop is not responsible for indirect, incidental, or consequential damages arising from use of the website.",
+    "changesTitle": "7. Changes to terms",
+    "changesText": "We may update these Terms of Use at any time. Continuing to use the website after changes means you accept the new terms.",
+    "noticePrefix": "By using PetShop services, you have read, understood, and agreed to all",
+    "termsLabel": "Terms of Use",
+    "and": "and",
+    "privacyLabel": "Privacy Policy"
+  },
+  "productDetail": {
+    "home": "Home",
+    "stock": "Stock:",
+    "stockCount": "{{count}} products",
+    "outOfStock": "Out of stock",
+    "favorite": "Favorite",
+    "share": "Share",
+    "productCode": "Product code:",
+    "type": "Type:",
+    "related": "Related products",
+    "quantityLimit": "The selected quantity exceeds the remaining stock!"
+  },
+  "serviceDetail": {
+    "notFound": "Service not found.",
+    "loginRequired": "Please log in to book a service!",
+    "added": "Added \"{{name}}\" to cart!",
+    "serviceFallback": "SERVICE",
+    "adding": "Adding...",
+    "addToCart": "ADD TO CART",
+    "backToServices": "Back to service list"
+  },
+  "staffDetail": {
+    "title": "Staff Information",
+    "loading": "Loading data...",
+    "level": "Level:",
+    "experience": "Experience:",
+    "phone": "Phone:",
+    "empty": "No staff data available."
+  },
+  "dashboard": {
+    "back": "Back to Dashboard",
+    "revenue": "Total revenue",
+    "fromOrders": "From {{count}} orders",
+    "fromServices": "From {{count}} completed services",
+    "orders": {
+      "title": "My orders",
+      "subtitle": "Manage purchase history",
+      "order": "Order",
+      "date": "Order date",
+      "total": "Total",
+      "payment": "Payment method",
+      "shippingAddress": "Shipping address",
+      "products": "Ordered products",
+      "grandTotal": "Grand total:",
+      "emptyTitle": "No orders yet",
+      "emptyDescription": "Start shopping to create your first order",
+      "startShopping": "Start shopping",
+      "detailTitle": "Order details #{{id}}"
+    },
+    "admin": {
+      "subtitle": "Manage the entire PetShop system",
+      "totalUsers": "Total users",
+      "totalOrders": "Total orders",
+      "totalBookings": "Total service bookings",
+      "products": "Products",
+      "salesRevenue": "Sales revenue",
+      "serviceRevenue": "Service revenue",
+      "userManagement": "User management",
+      "staff": "Staff",
+      "customers": "Customers",
+      "productManagement": "Product management",
+      "serviceManagement": "Service management",
+      "hotel": "Hotel",
+      "pendingOrders": "Pending orders",
+      "pendingServices": "Pending services",
+      "outOfStock": "Out-of-stock products"
+    },
+    "staff": {
+      "subtitle": "Manage orders and sales",
+      "totalOrders": "Total orders",
+      "pending": "Pending",
+      "shipping": "Shipping",
+      "delivered": "Delivered",
+      "orderList": "Order list",
+      "refresh": "Refresh",
+      "customer": "Customer",
+      "date": "Date",
+      "action": "Action",
+      "walkIn": "Walk-in customer",
+      "update": "Update",
+      "updateStatus": "Update order status",
+      "updateSuccess": "Order status updated successfully!",
+      "updateError": "Something went wrong while updating status"
+    },
+    "ktv": {
+      "subtitle": "Manage assigned services",
+      "totalServices": "Total services",
+      "serviceList": "Service list",
+      "empty": "No assigned services",
+      "updateStatus": "Update service status"
+    },
+    "bookings": {
+      "title": "Booked services",
+      "subtitle": "Manage service booking schedule",
+      "emptyTitle": "No booked services yet",
+      "emptyDescription": "Explore the services we provide",
+      "viewServices": "View services",
+      "detailTitle": "Service booking details #{{id}}",
+      "dateTime": "Date / Time",
+      "priceStatus": "Price / Status",
+      "servicePrice": "Service price:",
+      "assignedKtv": "Assigned technician"
+    },
+    "customer": {
+      "loading": "Loading information...",
+      "welcome": "Welcome, {{name}}!",
+      "settings": "Account settings",
+      "orders": "Orders",
+      "bookedServices": "Booked services",
+      "pets": "Pets",
+      "points": "Reward points",
+      "myPets": "My pets",
+      "addPet": "Add pet",
+      "addPetPlus": "+ Add pet",
+      "breed": "Breed:",
+      "age": "Age:",
+      "ageValue": "{{age}} years old",
+      "noPets": "You do not have any pets yet",
+      "recentOrders": "Recent orders",
+      "accountInfo": "Account information",
+      "editInfo": "Edit information"
+    },
+    "settings": {
+      "title": "Settings",
+      "subtitle": "Manage account and security",
+      "personalInfo": "Personal information",
+      "changePassword": "Change password",
+      "privacy": "Privacy",
+      "emailLocked": "Email cannot be changed",
+      "customerRole": "Customer",
+      "currentPassword": "Current password",
+      "newPassword": "New password",
+      "confirmNewPassword": "Confirm new password",
+      "updatePassword": "Update password",
+      "logoutDescription": "You will be logged out of your account.",
+      "updateSuccess": "Information updated successfully!",
+      "passwordMismatch": "New passwords do not match!",
+      "currentPasswordWrong": "Current password is incorrect!",
+      "passwordSuccess": "Password changed successfully!",
+      "logoutConfirm": "Are you sure you want to log out?"
+    },
+    "customerPets": {
+      "title": "My pets",
+      "subtitle": "Manage pet list",
+      "addNew": "Add new pet",
+      "name": "Pet name *",
+      "type": "Pet type *",
+      "breed": "Breed *",
+      "age": "Age (years) *",
+      "weight": "Weight (kg) *",
+      "description": "Description",
+      "namePlaceholder": "Example: Milo",
+      "breedPlaceholder": "Example: Golden Retriever",
+      "agePlaceholder": "Example: 3",
+      "weightPlaceholder": "Example: 28",
+      "descriptionPlaceholder": "Describe your pet's traits and personality...",
+      "save": "Save pet",
+      "hideForm": "Hide form",
+      "edit": "Edit",
+      "delete": "Delete",
+      "emptyTitle": "No pets yet",
+      "emptyDescription": "Add your first pet",
+      "required": "Please fill in all required fields!",
+      "addSuccess": "Pet added successfully!"
+    },
+    "adminBooking": {
+      "title": "Booking management",
+      "subtitle": "Track and manage all service bookings",
+      "searchPlaceholder": "Search by customer, pet, staff...",
+      "petName": "Pet name",
+      "assignedStaff": "Assigned staff",
+      "time": "Time",
+      "empty": "No booking data",
+      "fetchError": "Could not fetch data"
+    }
+  }
+}

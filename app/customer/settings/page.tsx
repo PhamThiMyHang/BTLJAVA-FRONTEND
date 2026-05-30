@@ -9,8 +9,10 @@ import { getCurrentUser, logoutUser } from '@/lib/auth';
 import { User } from '@/lib/mock-data';
 import Link from 'next/link';
 import { LogOut, Lock } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export default function SettingsPage() {
+  const { t } = useTranslation();
   const router = useRouter();
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [formData, setFormData] = useState({
@@ -66,23 +68,23 @@ export default function SettingsPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    alert('Cập nhật thông tin thành công!');
+    alert(t('dashboard.settings.updateSuccess'));
   };
 
   const handlePasswordSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (passwordData.newPassword !== passwordData.confirmPassword) {
-      alert('Mật khẩu mới không khớp!');
+      alert(t('dashboard.settings.passwordMismatch'));
       return;
     }
 
     if (passwordData.currentPassword !== currentUser.password) {
-      alert('Mật khẩu hiện tại không đúng!');
+      alert(t('dashboard.settings.currentPasswordWrong'));
       return;
     }
 
-    alert('Đổi mật khẩu thành công!');
+    alert(t('dashboard.settings.passwordSuccess'));
     setChangePassword(false);
     setPasswordData({
       currentPassword: '',
@@ -92,7 +94,7 @@ export default function SettingsPage() {
   };
 
   const handleLogout = () => {
-    if (confirm('Bạn chắc chắn muốn đăng xuất?')) {
+    if (confirm(t('dashboard.settings.logoutConfirm'))) {
       logoutUser();
       router.push('/');
     }
@@ -108,11 +110,11 @@ export default function SettingsPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">Cài đặt</h1>
-                <p className="text-gray-600 mt-2">Quản lý tài khoản và bảo mật</p>
+                <h1 className="text-3xl font-bold text-gray-900">{t('dashboard.settings.title')}</h1>
+                <p className="text-gray-600 mt-2">{t('dashboard.settings.subtitle')}</p>
               </div>
               <Link href="/customer">
-                <Button variant="outline">Quay lại Dashboard</Button>
+                <Button variant="outline">{t('dashboard.back')}</Button>
               </Link>
             </div>
           </div>
@@ -127,13 +129,13 @@ export default function SettingsPage() {
                 <h3 className="font-semibold text-gray-900 mb-4">Menu</h3>
                 <div className="space-y-2">
                   <button className="block w-full text-left px-4 py-2 rounded-lg bg-orange-600 text-white">
-                    Thông tin cá nhân
+                    {t('dashboard.settings.personalInfo')}
                   </button>
                   <button onClick={() => setChangePassword(!changePassword)} className="block w-full text-left px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-50">
-                    Đổi mật khẩu
+                    {t('dashboard.settings.changePassword')}
                   </button>
                   <button className="block w-full text-left px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-50">
-                    Quyền riêng tư
+                    {t('dashboard.settings.privacy')}
                   </button>
                 </div>
               </div>
@@ -143,12 +145,12 @@ export default function SettingsPage() {
             <div className="md:col-span-2">
               {!changePassword ? (
                 <div className="bg-white border rounded-lg p-8">
-                  <h2 className="text-2xl font-bold text-gray-900 mb-6">Thông tin cá nhân</h2>
+                  <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('dashboard.settings.personalInfo')}</h2>
 
                   <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Họ và tên
+                        {t('common.fields.fullName')}
                       </label>
                       <input
                         type="text"
@@ -170,12 +172,12 @@ export default function SettingsPage() {
                         onChange={handleChange}
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-600"
                       />
-                      <p className="text-xs text-gray-500 mt-1">Không thể thay đổi email</p>
+                      <p className="text-xs text-gray-500 mt-1">{t('dashboard.settings.emailLocked')}</p>
                     </div>
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Số điện thoại
+                        {t('common.fields.phone')}
                       </label>
                       <input
                         type="tel"
@@ -188,7 +190,7 @@ export default function SettingsPage() {
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Địa chỉ
+                        {t('common.fields.address')}
                       </label>
                       <input
                         type="text"
@@ -201,12 +203,12 @@ export default function SettingsPage() {
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Vai trò
+                        {t('common.fields.role')}
                       </label>
                       <input
                         type="text"
                         disabled
-                        value="Khách hàng"
+                        value={t('dashboard.settings.customerRole')}
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-600"
                       />
                     </div>
@@ -216,7 +218,7 @@ export default function SettingsPage() {
                         type="submit"
                         className="w-full bg-orange-600 hover:bg-orange-700 text-white font-semibold"
                       >
-                        Lưu thay đổi
+                        {t('common.actions.save')}
                       </Button>
                     </div>
                   </form>
@@ -225,13 +227,13 @@ export default function SettingsPage() {
                 <div className="bg-white border rounded-lg p-8">
                   <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
                     <Lock className="w-6 h-6 text-orange-600" />
-                    Đổi mật khẩu
+                    {t('dashboard.settings.changePassword')}
                   </h2>
 
                   <form onSubmit={handlePasswordSubmit} className="space-y-6">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Mật khẩu hiện tại
+                        {t('dashboard.settings.currentPassword')}
                       </label>
                       <input
                         type="password"
@@ -244,7 +246,7 @@ export default function SettingsPage() {
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Mật khẩu mới
+                        {t('dashboard.settings.newPassword')}
                       </label>
                       <input
                         type="password"
@@ -257,7 +259,7 @@ export default function SettingsPage() {
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Xác nhận mật khẩu mới
+                        {t('dashboard.settings.confirmNewPassword')}
                       </label>
                       <input
                         type="password"
@@ -273,7 +275,7 @@ export default function SettingsPage() {
                         type="submit"
                         className="flex-1 bg-orange-600 hover:bg-orange-700 text-white font-semibold"
                       >
-                        Cập nhật mật khẩu
+                        {t('dashboard.settings.updatePassword')}
                       </Button>
                       <Button
                         type="button"
@@ -281,7 +283,7 @@ export default function SettingsPage() {
                         className="flex-1"
                         onClick={() => setChangePassword(false)}
                       >
-                        Hủy
+                        {t('common.actions.cancel')}
                       </Button>
                     </div>
                   </form>
@@ -290,16 +292,16 @@ export default function SettingsPage() {
 
               {/* Logout Button */}
               <div className="mt-8 bg-red-50 border border-red-200 rounded-lg p-8">
-                <h3 className="text-lg font-semibold text-red-900 mb-4">Đăng xuất</h3>
+                <h3 className="text-lg font-semibold text-red-900 mb-4">{t('common.auth.logout')}</h3>
                 <p className="text-red-700 mb-6">
-                  Bạn sẽ được đăng xuất khỏi tài khoản của mình.
+                  {t('dashboard.settings.logoutDescription')}
                 </p>
                 <Button
                   onClick={handleLogout}
                   className="bg-red-600 hover:bg-red-700 text-white flex items-center gap-2"
                 >
                   <LogOut className="w-4 h-4" />
-                  Đăng xuất
+                  {t('common.auth.logout')}
                 </Button>
               </div>
             </div>

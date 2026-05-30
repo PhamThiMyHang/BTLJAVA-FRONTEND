@@ -10,8 +10,10 @@ import { User } from '@/lib/mock-data';
 import { BarChart3, Users, ShoppingBag, Calendar } from 'lucide-react';
 import { getOrders, getServiceBookings, getAllUsers, getProducts, getServices } from '@/lib/storage';
 import { getAllUsers as getAllUsersAuth } from '@/lib/auth';
+import { useTranslation } from 'react-i18next';
 
 export default function AdminDashboard() {
+  const { t } = useTranslation();
   const router = useRouter();
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
@@ -28,7 +30,7 @@ export default function AdminDashboard() {
   }, [router]);
 
   if (loading || !currentUser) {
-    return <div>Loading...</div>;
+    return <div>{t('common.loading.default')}</div>;
   }
 
   const orders = getOrders();
@@ -40,25 +42,26 @@ export default function AdminDashboard() {
   const stats = [
     {
       icon: '👥',
-      label: 'Tổng người dùng',
+      label: t('dashboard.admin.totalUsers'),
       value: users.length,
       color: 'bg-blue-100 text-blue-600',
     },
     {
       icon: '🛍️',
-      label: 'Tổng đơn hàng',
+      label: t('dashboard.admin.totalOrders'),
       value: orders.length,
       color: 'bg-green-100 text-green-600',
     },
     {
       icon: '📅',
-      label: 'Tổng đặt dịch vụ',
+      label: t('dashboard.admin.totalBookings'),
+      route: '/admin/booking',
       value: bookings.length,
       color: 'bg-orange-100 text-orange-600',
     },
     {
       icon: '📦',
-      label: 'Sản phẩm',
+      label: t('dashboard.admin.products'),
       value: products.length,
       color: 'bg-purple-100 text-purple-600',
     },
@@ -76,7 +79,7 @@ export default function AdminDashboard() {
         <section className="bg-white border-b">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-            <p className="text-gray-600 mt-2">Quản lý toàn bộ hệ thống PetShop</p>
+            <p className="text-gray-600 mt-2">{t('dashboard.admin.subtitle')}</p>
           </div>
         </section>
 
@@ -88,8 +91,8 @@ export default function AdminDashboard() {
                 <div
                   key={index}
                   onClick={() => {
-                    if (stat.label === 'Tổng đặt dịch vụ') {
-                      router.push('/admin/booking');
+                    if ('route' in stat && stat.route) {
+                      router.push(stat.route);
                     }
                   }}
                   className={`
@@ -114,23 +117,23 @@ export default function AdminDashboard() {
             <div className="bg-white border rounded-lg p-6">
               <div className="flex items-center gap-2 mb-4">
                 <BarChart3 className="w-6 h-6 text-orange-600" />
-                <h2 className="text-xl font-bold text-gray-900">Doanh thu bán hàng</h2>
+                <h2 className="text-xl font-bold text-gray-900">{t('dashboard.admin.salesRevenue')}</h2>
               </div>
               <p className="text-3xl font-bold text-orange-600">
                 {(totalRevenue / 1000).toFixed(0)}K
               </p>
-              <p className="text-sm text-gray-600 mt-2">Từ {orders.length} đơn hàng</p>
+              <p className="text-sm text-gray-600 mt-2">{t('dashboard.fromOrders', { count: orders.length })}</p>
             </div>
 
             <div className="bg-white border rounded-lg p-6">
               <div className="flex items-center gap-2 mb-4">
                 <Calendar className="w-6 h-6 text-orange-600" />
-                <h2 className="text-xl font-bold text-gray-900">Doanh thu dịch vụ</h2>
+                <h2 className="text-xl font-bold text-gray-900">{t('dashboard.admin.serviceRevenue')}</h2>
               </div>
               <p className="text-3xl font-bold text-orange-600">
                 {(servicesRevenue / 1000).toFixed(0)}K
               </p>
-              <p className="text-sm text-gray-600 mt-2">Từ {bookings.length} đặt dịch vụ</p>
+              <p className="text-sm text-gray-600 mt-2">{t('dashboard.fromServices', { count: bookings.length })}</p>
             </div>
           </div>
 
@@ -140,7 +143,7 @@ export default function AdminDashboard() {
             <div className="bg-white border rounded-lg p-6">
               <div className="flex items-center gap-2 mb-6">
                 <Users className="w-6 h-6 text-blue-600" />
-                <h2 className="text-xl font-bold text-gray-900">Quản lý người dùng</h2>
+                <h2 className="text-xl font-bold text-gray-900">{t('dashboard.admin.userManagement')}</h2>
               </div>
 
               <div className="space-y-2 mb-6">
@@ -149,7 +152,7 @@ export default function AdminDashboard() {
                   <span className="font-semibold">{users.filter(u => u.role === 'admin').length}</span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-600">Nhân viên</span>
+                  <span className="text-gray-600">{t('dashboard.admin.staff')}</span>
                   <span className="font-semibold">{users.filter(u => u.role === 'staff').length}</span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
@@ -157,13 +160,13 @@ export default function AdminDashboard() {
                   <span className="font-semibold">{users.filter(u => u.role === 'ktv').length}</span>
                 </div>
                 <div className="flex items-center justify-between text-sm border-t pt-2 mt-2">
-                  <span className="text-gray-600">Khách hàng</span>
+                  <span className="text-gray-600">{t('dashboard.admin.customers')}</span>
                   <span className="font-semibold">{users.filter(u => u.role === 'customer').length}</span>
                 </div>
               </div>
 
               <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
-                Quản lý người dùng
+                {t('dashboard.admin.userManagement')}
               </Button>
             </div>
 
@@ -171,7 +174,7 @@ export default function AdminDashboard() {
             <div className="bg-white border rounded-lg p-6">
               <div className="flex items-center gap-2 mb-6">
                 <ShoppingBag className="w-6 h-6 text-green-600" />
-                <h2 className="text-xl font-bold text-gray-900">Quản lý sản phẩm</h2>
+                <h2 className="text-xl font-bold text-gray-900">{t('dashboard.admin.productManagement')}</h2>
               </div>
 
               <div className="space-y-2 mb-6">
@@ -187,7 +190,7 @@ export default function AdminDashboard() {
               </div>
 
               <Button className="w-full bg-green-600 hover:bg-green-700 text-white">
-                Quản lý sản phẩm
+                {t('dashboard.admin.productManagement')}
               </Button>
             </div>
           </div>
@@ -196,14 +199,14 @@ export default function AdminDashboard() {
           <div className="mt-6 bg-white border rounded-lg p-6">
             <div className="flex items-center gap-2 mb-6">
               <Calendar className="w-6 h-6 text-orange-600" />
-              <h2 className="text-xl font-bold text-gray-900">Quản lý dịch vụ</h2>
+              <h2 className="text-xl font-bold text-gray-900">{t('dashboard.admin.serviceManagement')}</h2>
             </div>
 
             <div className="grid md:grid-cols-5 gap-4 mb-6">
               {[
                 { label: 'Grooming', count: services.filter(s => s.category === 'grooming').length },
                 { label: 'Spa', count: services.filter(s => s.category === 'spa').length },
-                { label: 'Khách sạn', count: services.filter(s => s.category === 'hotel').length },
+                { label: t('dashboard.admin.hotel'), count: services.filter(s => s.category === 'hotel').length },
                 { label: 'Healthcare', count: services.filter(s => s.category === 'healthcare').length },
                 { label: 'Training', count: services.filter(s => s.category === 'training').length },
               ].map((item) => (
@@ -215,7 +218,7 @@ export default function AdminDashboard() {
             </div>
 
             <Button className="w-full bg-orange-600 hover:bg-orange-700 text-white">
-              Quản lý dịch vụ
+              {t('dashboard.admin.serviceManagement')}
             </Button>
           </div>
 
@@ -223,17 +226,17 @@ export default function AdminDashboard() {
           <div className="mt-6 grid md:grid-cols-3 gap-6">
             {[
               {
-                title: 'Đơn hàng chờ xử lý',
+                title: t('dashboard.admin.pendingOrders'),
                 value: orders.filter(o => o.status === 'pending').length,
                 color: 'text-yellow-600',
               },
               {
-                title: 'Dịch vụ chờ xác nhận',
+                title: t('dashboard.admin.pendingServices'),
                 value: bookings.filter(b => b.status === 'pending').length,
                 color: 'text-blue-600',
               },
               {
-                title: 'Sản phẩm hết hàng',
+                title: t('dashboard.admin.outOfStock'),
                 value: products.filter(p => p.stock === 0).length,
                 color: 'text-red-600',
               },

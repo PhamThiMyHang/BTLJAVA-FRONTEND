@@ -12,8 +12,10 @@ import { initializeUsers, isAuthenticated, getCurrentUser } from '@/lib/auth';
 import { sanPhamService } from '@/services/sanPhamService';
 import { dichVuService } from '@/services/dichVuService';
 import { gioHangService } from '@/services/gioHangService';
+import { useTranslation } from 'react-i18next';
 
 export default function Home() {
+  const { t } = useTranslation();
   const router = useRouter();
   const [products, setProducts] = useState<any[]>([]);
   const [services, setServices] = useState<any[]>([]);
@@ -51,7 +53,7 @@ export default function Home() {
   const handleAddToCart = async (e: React.MouseEvent, productId: string) => {
     e.preventDefault();
     if (!isAuthenticated()) {
-      alert('Vui lòng đăng nhập để thực hiện tính năng này!');
+      alert(t('common.messages.loginRequired'));
       router.push('/login');
       return;
     }
@@ -64,12 +66,15 @@ export default function Home() {
         soLuong: 1
       });
       window.dispatchEvent(new Event('cartUpdate'));
-      alert('Sản phẩm đã được thêm vào giỏ hàng thành công!');
+      alert(t('common.messages.addProductSuccess'));
     } catch (error) {
       console.error("Lỗi khi thêm giỏ hàng:", error);
-      alert('Có lỗi xảy ra, vui lòng thử lại!');
+      alert(t('common.messages.genericError'));
     }
   };
+
+  const formatPrice = (value: number) =>
+    `${Number(value).toLocaleString(t('common.currency.locale'))} ${t('common.currency.suffix')}`;
 
   if (loading) {
     return (
@@ -89,11 +94,11 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div>
-                <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Chào mừng đến PetShop</h1>
-                <p className="text-lg text-gray-700 mb-6">Cửa hàng thú cưng hàng đầu - Cung cấp sản phẩm chất lượng cao, dịch vụ grooming, spa, và khách sạn chuyên nghiệp.</p>
+                <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">{t('home.hero.title')}</h1>
+                <p className="text-lg text-gray-700 mb-6">{t('home.hero.description')}</p>
                 <div className="flex gap-4">
-                  <Link href="/products"><Button className="bg-orange-600 hover:bg-orange-700 text-white px-8">Mua sắm ngay</Button></Link>
-                  <Link href="/services"><Button variant="outline" className="border-orange-600 text-orange-600 hover:bg-orange-50 px-8">Xem dịch vụ</Button></Link>
+                  <Link href="/products"><Button className="bg-orange-600 hover:bg-orange-700 text-white px-8">{t('home.hero.shop')}</Button></Link>
+                  <Link href="/services"><Button variant="outline" className="border-orange-600 text-orange-600 hover:bg-orange-50 px-8">{t('home.hero.services')}</Button></Link>
                 </div>
               </div>
               <div className="bg-orange-200 h-80 rounded-lg flex items-center justify-center"><div className="text-6xl">🐶🐱</div></div>
@@ -105,8 +110,8 @@ export default function Home() {
         <section className="py-16 md:py-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Sản phẩm nổi bật</h2>
-              <p className="text-gray-600 text-lg">Những sản phẩm chất lượng cao được yêu thích nhất</p>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{t('home.featuredProducts.title')}</h2>
+              <p className="text-gray-600 text-lg">{t('home.featuredProducts.description')}</p>
             </div>
             <div className="grid md:grid-cols-4 gap-6">
               {products.map((product) => (
@@ -115,19 +120,19 @@ export default function Home() {
                     <div className="bg-gray-200 h-48 flex items-center justify-center text-gray-400">📦</div>
                     <div className="p-4">
                       <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2">{product.tenSP}</h3>
-                      <p className="text-sm text-gray-600 mb-3 line-clamp-2">{product.moTa || 'Sản phẩm chất lượng cao'}</p>
+                      <p className="text-sm text-gray-600 mb-3 line-clamp-2">{product.moTa || t('common.fallbacks.qualityProduct')}</p>
                       <div className="flex items-center justify-between mb-4">
-                        <span className="text-xl font-bold text-orange-600">{Number(product.gia).toLocaleString('vi-VN')} đ</span>
+                        <span className="text-xl font-bold text-orange-600">{formatPrice(product.gia)}</span>
                       </div>
                       <Button className="w-full bg-orange-600 hover:bg-orange-700 text-white" onClick={(e) => handleAddToCart(e, product.maSP)}>
-                        <ShoppingCart className="w-4 h-4 mr-2" /> Thêm vào giỏ
+                        <ShoppingCart className="w-4 h-4 mr-2" /> {t('common.actions.addToCart')}
                       </Button>
                     </div>
                   </div>
                 </Link>
               ))}
             </div>
-            <div className="text-center mt-8"><Link href="/products"><Button variant="outline" className="border-orange-600 text-orange-600 hover:bg-orange-50">Xem tất cả sản phẩm</Button></Link></div>
+            <div className="text-center mt-8"><Link href="/products"><Button variant="outline" className="border-orange-600 text-orange-600 hover:bg-orange-50">{t('home.featuredProducts.viewAll')}</Button></Link></div>
           </div>
         </section>
 
@@ -135,8 +140,8 @@ export default function Home() {
         <section className="bg-gray-50 py-16 md:py-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Dịch vụ nổi bật</h2>
-              <p className="text-gray-600 text-lg">Các dịch vụ chuyên nghiệp cho thú cưng của bạn</p>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{t('home.featuredServices.title')}</h2>
+              <p className="text-gray-600 text-lg">{t('home.featuredServices.description')}</p>
             </div>
             <div className="grid md:grid-cols-3 gap-8">
               {services.map((service) => (
@@ -145,26 +150,26 @@ export default function Home() {
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">{service.tenDV}</h3>
                   <p className="text-gray-600 text-sm mb-4 line-clamp-3">{service.moTa}</p>
                   <div className="flex items-center justify-between mb-4">
-                    <span className="text-2xl font-bold text-orange-600">{Number(service.gia).toLocaleString('vi-VN')} đ</span>
+                    <span className="text-2xl font-bold text-orange-600">{formatPrice(service.gia)}</span>
                   </div>
-                  <Link href={`/services/${service.maDV}`}><Button className="w-full bg-orange-600 hover:bg-orange-700 text-white">Đặt ngay</Button></Link>
+                  <Link href={`/services/${service.maDV}`}><Button className="w-full bg-orange-600 hover:bg-orange-700 text-white">{t('common.actions.bookNow')}</Button></Link>
                 </div>
               ))}
             </div>
-            <div className="text-center mt-8"><Link href="/services"><Button variant="outline" className="border-orange-600 text-orange-600 hover:bg-orange-50">Xem tất cả dịch vụ</Button></Link></div>
+            <div className="text-center mt-8"><Link href="/services"><Button variant="outline" className="border-orange-600 text-orange-600 hover:bg-orange-50">{t('home.featuredServices.viewAll')}</Button></Link></div>
           </div>
         </section>
 
         {/* Why Choose Us */}
         <section className="py-16 md:py-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12"><h2 className="text-3xl md:text-4xl font-bold text-gray-900">Tại sao chọn PetShop?</h2></div>
+            <div className="text-center mb-12"><h2 className="text-3xl md:text-4xl font-bold text-gray-900">{t('home.why.title')}</h2></div>
             <div className="grid md:grid-cols-4 gap-6">
               {[
-                { icon: '🏆', title: 'Chất lượng cao', desc: 'Sản phẩm và dịch vụ tốt nhất' },
-                { icon: '👨‍⚕️', title: 'Nhân viên chuyên nghiệp', desc: 'Đội ngũ được đào tạo sâu' },
-                { icon: '💰', title: 'Giá cạnh tranh', desc: 'Giá tốt nhất thị trường' },
-                { icon: '📞', title: 'Hỗ trợ 24/7', desc: 'Dịch vụ khách hàng sẵn sàng' },
+                { icon: '🏆', title: t('home.why.items.0.title'), desc: t('home.why.items.0.desc') },
+                { icon: '👨‍⚕️', title: t('home.why.items.1.title'), desc: t('home.why.items.1.desc') },
+                { icon: '💰', title: t('home.why.items.2.title'), desc: t('home.why.items.2.desc') },
+                { icon: '📞', title: t('home.why.items.3.title'), desc: t('home.why.items.3.desc') },
               ].map((item, i) => (
                 <div key={i} className="text-center p-6 border rounded-lg">
                   <div className="text-4xl mb-4">{item.icon}</div>
@@ -179,8 +184,8 @@ export default function Home() {
         {/* CTA */}
         <section className="bg-orange-600 text-white py-12">
           <div className="max-w-7xl mx-auto px-4 text-center">
-            <h2 className="text-3xl font-bold mb-4">Bắt đầu mua sắm ngay hôm nay</h2>
-            <Link href="/products"><Button className="bg-white text-orange-600 hover:bg-orange-50 px-8">Khám phá ngay</Button></Link>
+            <h2 className="text-3xl font-bold mb-4">{t('home.cta.title')}</h2>
+            <Link href="/products"><Button className="bg-white text-orange-600 hover:bg-orange-50 px-8">{t('common.actions.exploreNow')}</Button></Link>
           </div>
         </section>
       </main>

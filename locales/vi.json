@@ -1,0 +1,514 @@
+{
+  "common": {
+    "brand": "PetShop",
+    "language": {
+      "label": "Ngôn ngữ",
+      "vi": "Tiếng Việt",
+      "en": "English"
+    },
+    "nav": {
+      "products": "Sản phẩm",
+      "services": "Dịch vụ",
+      "pets": "Thú cưng",
+      "about": "Về chúng tôi",
+      "cart": "Giỏ hàng",
+      "dashboard": "Dashboard"
+    },
+    "auth": {
+      "login": "Đăng nhập",
+      "register": "Đăng ký",
+      "logout": "Đăng xuất"
+    },
+    "actions": {
+      "back": "Quay lại",
+      "close": "Đóng",
+      "details": "Chi tiết",
+      "save": "Lưu thay đổi",
+      "cancel": "Hủy",
+      "search": "Tìm kiếm",
+      "viewAll": "Xem tất cả",
+      "shopNow": "Mua sắm ngay",
+      "exploreNow": "Khám phá ngay",
+      "bookNow": "Đặt ngay",
+      "addToCart": "Thêm vào giỏ",
+      "addCart": "Thêm giỏ"
+    },
+    "status": {
+      "all": "Tất cả",
+      "pending": "Chờ xác nhận",
+      "confirmed": "Đã xác nhận",
+      "inProgress": "Đang thực hiện",
+      "completed": "Hoàn thành",
+      "cancelled": "Đã hủy",
+      "processing": "Đang xử lý",
+      "shipping": "Đang vận chuyển",
+      "unknown": "Không xác định"
+    },
+    "fields": {
+      "service": "Dịch vụ",
+      "pet": "Thú cưng",
+      "schedule": "Lịch",
+      "price": "Giá",
+      "status": "Trạng thái",
+      "notes": "Ghi chú",
+      "customer": "Khách hàng",
+      "employee": "Nhân viên",
+      "phone": "Số điện thoại",
+      "address": "Địa chỉ",
+      "email": "Email",
+      "password": "Mật khẩu",
+      "fullName": "Họ và tên",
+      "role": "Vai trò"
+    },
+    "loading": {
+      "default": "Đang tải...",
+      "products": "Đang tải sản phẩm...",
+      "services": "Đang tải dịch vụ...",
+      "data": "Đang tải dữ liệu..."
+    },
+    "currency": {
+      "suffix": "đ",
+      "locale": "vi-VN"
+    },
+    "fallbacks": {
+      "qualityProduct": "Sản phẩm chất lượng cao",
+      "unknownName": "Chưa rõ tên",
+      "unknownRole": "Chưa rõ chức vụ",
+      "none": "Không có",
+      "notUpdated": "Chưa cập nhật"
+    },
+    "messages": {
+      "loginRequired": "Vui lòng đăng nhập để thực hiện tính năng này!",
+      "addProductSuccess": "Sản phẩm đã được thêm vào giỏ hàng thành công!",
+      "genericError": "Có lỗi xảy ra, vui lòng thử lại!"
+    }
+  },
+  "footer": {
+    "description": "Cửa hàng thú cưng hàng đầu, cung cấp sản phẩm chất lượng cao và dịch vụ chuyên nghiệp.",
+    "products": {
+      "food": "Thức ăn",
+      "toys": "Đồ chơi",
+      "cage": "Chuồng",
+      "hygiene": "Vệ sinh"
+    },
+    "services": {
+      "hotel": "Khách sạn thú cưng",
+      "healthcare": "Chăm sóc sức khỏe"
+    },
+    "contact": {
+      "title": "Liên hệ",
+      "address": "Địa chỉ: 123 Nguyễn Huệ, Quận 1, HCM",
+      "phone": "Điện thoại:",
+      "hours": "Giờ mở cửa: 8:00 - 21:00"
+    },
+    "copyright": "© 2026 PetShop. Tất cả quyền được bảo lưu.",
+    "privacy": "Chính sách bảo mật",
+    "terms": "Điều khoản sử dụng"
+  },
+  "notFound": {
+    "title": "Không tìm thấy trang",
+    "description": "Trang bạn đang tìm kiếm có thể đã bị xóa hoặc địa chỉ không chính xác.",
+    "home": "Về trang chủ",
+    "products": "Xem sản phẩm"
+  },
+  "home": {
+    "hero": {
+      "title": "Chào mừng đến PetShop",
+      "description": "Cửa hàng thú cưng hàng đầu - Cung cấp sản phẩm chất lượng cao, dịch vụ grooming, spa, và khách sạn chuyên nghiệp.",
+      "shop": "Mua sắm ngay",
+      "services": "Xem dịch vụ"
+    },
+    "featuredProducts": {
+      "title": "Sản phẩm nổi bật",
+      "description": "Những sản phẩm chất lượng cao được yêu thích nhất",
+      "viewAll": "Xem tất cả sản phẩm"
+    },
+    "featuredServices": {
+      "title": "Dịch vụ nổi bật",
+      "description": "Các dịch vụ chuyên nghiệp cho thú cưng của bạn",
+      "viewAll": "Xem tất cả dịch vụ"
+    },
+    "why": {
+      "title": "Tại sao chọn PetShop?",
+      "items": [
+        { "title": "Chất lượng cao", "desc": "Sản phẩm và dịch vụ tốt nhất" },
+        { "title": "Nhân viên chuyên nghiệp", "desc": "Đội ngũ được đào tạo sâu" },
+        { "title": "Giá cạnh tranh", "desc": "Giá tốt nhất thị trường" },
+        { "title": "Hỗ trợ 24/7", "desc": "Dịch vụ khách hàng sẵn sàng" }
+      ]
+    },
+    "cta": {
+      "title": "Bắt đầu mua sắm ngay hôm nay"
+    }
+  },
+  "products": {
+    "title": "Sản phẩm",
+    "description": "Khám phá bộ sưu tập sản phẩm chất lượng cao cho thú cưng của bạn",
+    "category": "Danh mục",
+    "all": "Tất cả",
+    "searchPlaceholder": "Tìm kiếm sản phẩm...",
+    "stock": "Số lượng còn {{count}}",
+    "empty": "Không có sản phẩm trong danh mục này",
+    "defaultShelf": "Mặc định",
+    "messages": {
+      "missingUser": "Không tìm thấy thông tin người dùng. Vui lòng đăng nhập lại!",
+      "addError": "Có lỗi xảy ra khi thêm vào giỏ hàng. Vui lòng thử lại!"
+    }
+  },
+  "servicesPage": {
+    "title": "Dịch vụ Thú Cưng",
+    "description": "Những dịch vụ chuyên nghiệp và tận tâm nhất cho thú cưng của bạn",
+    "category": "Danh mục",
+    "serviceFallback": "Dịch vụ",
+    "loadError": "Không thể tải danh sách dịch vụ.",
+    "empty": "Không tìm thấy dịch vụ nào trong danh mục này",
+    "categories": {
+      "TatCa": "Tất cả",
+      "Grooming": "Grooming & Chăm sóc lông",
+      "Spa": "Spa & Thư giãn",
+      "Hotel": "Khách sạn thú cưng",
+      "Healthcare": "Chăm sóc sức khỏe",
+      "Training": "Huấn luyện & Giáo dục"
+    }
+  },
+  "authPages": {
+    "login": {
+      "title": "Đăng nhập",
+      "subtitle": "Đăng nhập vào tài khoản của bạn",
+      "emailPlaceholder": "Nhập email của bạn",
+      "passwordPlaceholder": "Nhập mật khẩu của bạn",
+      "loading": "Đang đăng nhập...",
+      "invalid": "Email hoặc mật khẩu không đúng!",
+      "noAccount": "Chưa có tài khoản?",
+      "registerNow": "Đăng ký ngay",
+      "demoAccounts": "Tài khoản demo:"
+    },
+    "register": {
+      "title": "Đăng ký",
+      "subtitle": "Tạo tài khoản mới để bắt đầu mua sắm",
+      "nameLabel": "Họ và tên *",
+      "emailLabel": "Email *",
+      "phoneLabel": "Số điện thoại *",
+      "addressLabel": "Địa chỉ",
+      "passwordLabel": "Mật khẩu *",
+      "confirmPasswordLabel": "Xác nhận mật khẩu *",
+      "namePlaceholder": "Nhập tên của bạn",
+      "emailPlaceholder": "Nhập email của bạn",
+      "phonePlaceholder": "Nhập số điện thoại",
+      "addressPlaceholder": "Nhập địa chỉ của bạn",
+      "passwordPlaceholder": "Nhập mật khẩu (tối thiểu 6 ký tự)",
+      "confirmPasswordPlaceholder": "Nhập lại mật khẩu",
+      "loading": "Đang đăng ký...",
+      "passwordMismatch": "Mật khẩu không khớp!",
+      "passwordMin": "Mật khẩu phải có ít nhất 6 ký tự!",
+      "registerFailed": "Đăng ký thất bại!",
+      "registerSuccess": "Đăng ký thành công!",
+      "hasAccount": "Đã có tài khoản?"
+    },
+    "genericError": "Có lỗi xảy ra. Vui lòng thử lại!"
+  },
+  "cart": {
+    "title": "Giỏ hàng",
+    "loading": "Đang tải thông tin sản phẩm từ giỏ hàng...",
+    "quantity": "Số lượng: x{{count}}",
+    "lineTotal": "Thành tiền: {{amount}}",
+    "removeTitle": "Xóa sản phẩm này",
+    "backToShop": "Quay lại cửa hàng tìm thêm sản phẩm",
+    "summary": "Tóm tắt đơn hàng",
+    "subtotal": "Tạm tính sản phẩm",
+    "shippingFee": "Phí giao hàng",
+    "total": "Tổng số tiền cần trả",
+    "checkoutInfo": "Tiến hành điền thông tin giao hàng",
+    "shippingAddress": "Địa chỉ nhận hàng",
+    "addressPlaceholder": "Số nhà, tên đường, phường/xã, quận/huyện...",
+    "paymentMethod": "Hình thức thanh toán",
+    "payment": {
+      "cash": "Thanh toán khi nhận hàng (COD)",
+      "bank": "Chuyển khoản tài khoản ngân hàng",
+      "card": "Thẻ tín dụng / Quốc tế"
+    },
+    "confirmOrder": "Xác nhận đặt đơn hàng ngay",
+    "backToReview": "Quay lại kiểm tra sản phẩm",
+    "emptyTitle": "Giỏ hàng của bạn đang trống",
+    "emptyDescription": "Bạn chưa thêm món đồ hay bé thú cưng nào vào giỏ. Hãy quay lại cửa hàng để lựa chọn nhé!",
+    "startShopping": "Bắt đầu mua sắm ngay",
+    "messages": {
+      "removeError": "Không thể xóa sản phẩm khỏi giỏ hàng. Vui lòng thử lại!",
+      "addressRequired": "Vui lòng cung cấp địa chỉ nhận hàng!",
+      "emptyCart": "Giỏ hàng hiện tại đang trống!"
+    }
+  },
+  "about": {
+    "title": "Về Cửa Hàng Thú Cưng",
+    "description": "Tìm hiểu về chúng tôi và hành trình chăm sóc thú cưng chuyên nghiệp",
+    "imageAlt": "Chó và mèo",
+    "storyTitle": "Câu chuyện của chúng tôi",
+    "storyText": "Hệ thống được thành lập với mục đích mang đến những giải pháp lưu trú chất lượng cao và dịch vụ quản lý chuồng trại chuyên nghiệp cho các thú cưng.",
+    "teamTitle": "Đội ngũ của chúng tôi",
+    "teamLoading": "Đang tải danh sách nhân sự...",
+    "teamEmpty": "Chưa có thông tin nhân viên",
+    "stats": {
+      "customers": "Khách hàng tin tưởng",
+      "pets": "Thú cưng hệ thống",
+      "cages": "Chuồng nuôi hiện đại",
+      "staff": "Nhân viên chuyên nghiệp"
+    },
+    "ctaTitle": "Bắt đầu trải nghiệm hệ thống quản lý",
+    "goDashboard": "Đi tới Dashboard"
+  },
+  "petsPage": {
+    "title": "Hướng dẫn chăm sóc thú cưng",
+    "description": "Những lời khuyên hữu ích để chăm sóc thú cưng của bạn",
+    "tipsTitle": "Mẹo chăm sóc:",
+    "viewCareServices": "Xem dịch vụ chăm sóc",
+    "healthTitle": "Những điều cần biết về sức khỏe thú cưng",
+    "ctaTitle": "Hãy để chúng tôi giúp bạn chăm sóc thú cưng",
+    "ctaDescription": "Dịch vụ chăm sóc chuyên nghiệp từ những chuyên gia",
+    "exploreServices": "Khám phá dịch vụ",
+    "buyProducts": "Mua sản phẩm",
+    "galleryTitle": "Khoảnh khắc đáng yêu của thú cưng",
+    "galleryDescription": "Những người bạn nhỏ luôn mang lại niềm vui và năng lượng tích cực mỗi ngày",
+    "guides": [
+      {
+        "name": "Chó",
+        "description": "Những người bạn trung thành và vui vẻ",
+        "tips": ["Cần tập thể dục thường xuyên", "Ăn thực phẩm giàu dinh dưỡng", "Tắm và chải lông định kỳ", "Kiểm tra sức khỏe thường xuyên"]
+      },
+      {
+        "name": "Mèo",
+        "description": "Những bạn độc lập và ngoài thành phố",
+        "tips": ["Cần không gian để chơi ngoài", "Vệ sinh thùng cát thường xuyên", "Chăm sóc lông nhiều lần một tuần", "Đảm bảo an toàn trong nhà"]
+      },
+      {
+        "name": "Chim",
+        "description": "Những bạn thông minh và tươi vui",
+        "tips": ["Cần lồng rộng để bay", "Ăn hạt và rau quả tươi", "Yêu thích tiếp xúc xã hội", "Cần tiếng ồn để kích thích"]
+      },
+      {
+        "name": "Thỏ",
+        "description": "Những bạn dễ mến và nhẹ nhàng",
+        "tips": ["Cần chuồng rộng rãi", "Ăn cỏ và rau xanh", "Cần thời gian để chơi ngoài", "Vệ sinh chuồng hàng ngày"]
+      }
+    ],
+    "healthTips": [
+      { "title": "Tiêm chủng định kỳ", "description": "Giúp bảo vệ thú cưng khỏi các bệnh truyền nhiễm nguy hiểm" },
+      { "title": "Kiểm tra sức khỏe thường xuyên", "description": "Phát hiện sớm các vấn đề sức khỏe có thể xảy ra" },
+      { "title": "Dinh dưỡng cân bằng", "description": "Cung cấp tất cả các dưỡng chất cần thiết cho thú cưng" },
+      { "title": "Tập thể dục thường xuyên", "description": "Giúp thú cưng duy trì cân nặng và sức khỏe tốt" },
+      { "title": "Vệ sinh cá nhân", "description": "Tắm, chải lông, cắt móng định kỳ" },
+      { "title": "Tình yêu thương", "description": "Dành thời gian để chơi và kết nối với thú cưng" }
+    ]
+  },
+  "privacy": {
+    "title": "Chính sách bảo mật",
+    "introTitle": "1. Giới thiệu",
+    "introText": "PetShop tôn trọng và cam kết bảo vệ quyền riêng tư của khách hàng. Chính sách bảo mật này giải thích cách chúng tôi thu thập, sử dụng, tiết lộ và bảo vệ thông tin cá nhân của bạn.",
+    "infoTitle": "2. Thông tin chúng tôi thu thập",
+    "infoItems": ["Họ tên, email, số điện thoại, địa chỉ giao hàng", "Thông tin thú cưng: Tên, giống loài, tuổi, sức khỏe", "Lịch sử đơn hàng và phương thức thanh toán", "Thông tin tự động: IP, trình duyệt, thời gian truy cập"],
+    "purposeTitle": "3. Mục đích sử dụng thông tin",
+    "purposeItems": ["Xử lý đơn hàng và cung cấp dịch vụ", "Gửi thông báo, xác nhận đơn hàng", "Cải thiện trải nghiệm người dùng", "Phân tích hành vi sử dụng website", "Tuân thủ quy định pháp luật"],
+    "securityTitle": "4. Bảo mật thông tin",
+    "securityText": "Chúng tôi áp dụng các biện pháp bảo mật kỹ thuật và tổ chức cao nhất để bảo vệ thông tin cá nhân của bạn. Tuy nhiên, không có hệ thống nào là an toàn tuyệt đối.",
+    "rightsTitle": "5. Quyền của bạn",
+    "rightsItems": ["Truy cập và nhận bản sao thông tin cá nhân của mình", "Yêu cầu chỉnh sửa hoặc xóa thông tin", "Rút lại sự đồng ý xử lý dữ liệu", "Khiếu nại về cách chúng tôi xử lý dữ liệu"],
+    "contactTitle": "Liên hệ với chúng tôi",
+    "address": "123 Nguyễn Huệ, Quận 1<br />TP. Hồ Chí Minh"
+  },
+  "termsPage": {
+    "title": "Điều khoản sử dụng",
+    "acceptTitle": "1. Chấp nhận điều khoản",
+    "acceptText": "Khi truy cập và sử dụng website PetShop, bạn đồng ý tuân thủ và bị ràng buộc bởi các Điều khoản Sử dụng này. Nếu bạn không đồng ý, vui lòng không sử dụng dịch vụ của chúng tôi.",
+    "accountTitle": "2. Tài khoản người dùng",
+    "accountItems": ["Bạn phải cung cấp thông tin chính xác, đầy đủ khi đăng ký.", "Bạn chịu trách nhiệm bảo mật tài khoản và mật khẩu của mình.", "PetShop không chịu trách nhiệm cho bất kỳ tổn thất nào do bạn tiết lộ thông tin tài khoản."],
+    "paymentTitle": "3. Đặt hàng và thanh toán",
+    "paymentText": "Tất cả đơn hàng chỉ được xác nhận khi chúng tôi nhận được thanh toán đầy đủ. Chúng tôi có quyền từ chối hoặc hủy đơn hàng trong trường hợp phát hiện gian lận hoặc thông tin không chính xác.",
+    "refundTitle": "4. Chính sách hoàn tiền và đổi trả",
+    "refundText": "Sản phẩm lỗi hoặc hỏng do vận chuyển sẽ được đổi trả trong vòng 7 ngày. Dịch vụ đã thực hiện không được hoàn tiền trừ trường hợp lỗi từ phía PetShop.",
+    "responsibilityTitle": "5. Trách nhiệm của người dùng",
+    "responsibilityText": "Bạn cam kết không sử dụng website để thực hiện các hành vi vi phạm pháp luật, gây hại, hoặc ảnh hưởng đến quyền lợi của PetShop và các bên thứ ba.",
+    "liabilityTitle": "6. Giới hạn trách nhiệm",
+    "liabilityText": "PetShop không chịu trách nhiệm cho bất kỳ thiệt hại gián tiếp, ngẫu nhiên hoặc hậu quả nào phát sinh từ việc sử dụng website.",
+    "changesTitle": "7. Thay đổi điều khoản",
+    "changesText": "Chúng tôi có quyền cập nhật Điều khoản Sử dụng bất kỳ lúc nào. Việc bạn tiếp tục sử dụng website sau khi thay đổi nghĩa là bạn chấp nhận các điều khoản mới.",
+    "noticePrefix": "Bằng việc sử dụng dịch vụ của PetShop, bạn đã đọc, hiểu và đồng ý với toàn bộ",
+    "termsLabel": "Điều khoản Sử dụng",
+    "and": "và",
+    "privacyLabel": "Chính sách Bảo mật"
+  },
+  "productDetail": {
+    "home": "Trang chủ",
+    "stock": "Kho hàng:",
+    "stockCount": "{{count}} sản phẩm",
+    "outOfStock": "Hết hàng",
+    "favorite": "Yêu thích",
+    "share": "Chia sẻ",
+    "productCode": "Mã sản phẩm:",
+    "type": "Loại:",
+    "related": "Sản phẩm liên quan",
+    "quantityLimit": "Số lượng chọn vượt quá số lượng còn lại trong kho!"
+  },
+  "serviceDetail": {
+    "notFound": "Không tìm thấy dịch vụ.",
+    "loginRequired": "Vui lòng đăng nhập để đặt dịch vụ!",
+    "added": "Đã thêm \"{{name}}\" vào giỏ hàng!",
+    "serviceFallback": "DỊCH VỤ",
+    "adding": "Đang thêm...",
+    "addToCart": "THÊM VÀO GIỎ HÀNG",
+    "backToServices": "Quay lại danh sách dịch vụ"
+  },
+  "staffDetail": {
+    "title": "Thông Tin Nhân Viên",
+    "loading": "Đang tải dữ liệu...",
+    "level": "Trình độ:",
+    "experience": "Kinh nghiệm:",
+    "phone": "SĐT:",
+    "empty": "Không có dữ liệu nhân viên."
+  },
+  "dashboard": {
+    "back": "Quay lại Dashboard",
+    "revenue": "Tổng doanh thu",
+    "fromOrders": "Từ {{count}} đơn hàng",
+    "fromServices": "Từ {{count}} dịch vụ đã thực hiện",
+    "orders": {
+      "title": "Đơn hàng của tôi",
+      "subtitle": "Quản lý lịch sử mua hàng",
+      "order": "Đơn hàng",
+      "date": "Ngày đặt",
+      "total": "Tổng tiền",
+      "payment": "Phương thức thanh toán",
+      "shippingAddress": "Địa chỉ giao",
+      "products": "Sản phẩm đã đặt",
+      "grandTotal": "Tổng cộng:",
+      "emptyTitle": "Chưa có đơn hàng nào",
+      "emptyDescription": "Hãy bắt đầu mua sắm để tạo đơn hàng đầu tiên",
+      "startShopping": "Bắt đầu mua sắm",
+      "detailTitle": "Chi tiết đơn hàng #{{id}}"
+    },
+    "admin": {
+      "subtitle": "Quản lý toàn bộ hệ thống PetShop",
+      "totalUsers": "Tổng người dùng",
+      "totalOrders": "Tổng đơn hàng",
+      "totalBookings": "Tổng đặt dịch vụ",
+      "products": "Sản phẩm",
+      "salesRevenue": "Doanh thu bán hàng",
+      "serviceRevenue": "Doanh thu dịch vụ",
+      "userManagement": "Quản lý người dùng",
+      "staff": "Nhân viên",
+      "customers": "Khách hàng",
+      "productManagement": "Quản lý sản phẩm",
+      "serviceManagement": "Quản lý dịch vụ",
+      "hotel": "Khách sạn",
+      "pendingOrders": "Đơn hàng chờ xử lý",
+      "pendingServices": "Dịch vụ chờ xác nhận",
+      "outOfStock": "Sản phẩm hết hàng"
+    },
+    "staff": {
+      "subtitle": "Quản lý đơn hàng và bán hàng",
+      "totalOrders": "Tổng đơn hàng",
+      "pending": "Chờ xử lý",
+      "shipping": "Đang vận chuyển",
+      "delivered": "Đã giao",
+      "orderList": "Danh sách đơn hàng",
+      "refresh": "Làm mới",
+      "customer": "Khách hàng",
+      "date": "Ngày",
+      "action": "Hành động",
+      "walkIn": "Khách lẻ",
+      "update": "Cập nhật",
+      "updateStatus": "Cập nhật trạng thái đơn hàng",
+      "updateSuccess": "Cập nhật trạng thái đơn hàng thành công!",
+      "updateError": "Có lỗi xảy ra khi cập nhật trạng thái"
+    },
+    "ktv": {
+      "subtitle": "Quản lý các dịch vụ được giao",
+      "totalServices": "Tổng dịch vụ",
+      "serviceList": "Danh sách dịch vụ",
+      "empty": "Không có dịch vụ nào được giao",
+      "updateStatus": "Cập nhật trạng thái dịch vụ"
+    },
+    "bookings": {
+      "title": "Dịch vụ đã đặt",
+      "subtitle": "Quản lý lịch đặt dịch vụ",
+      "emptyTitle": "Chưa có dịch vụ nào được đặt",
+      "emptyDescription": "Hãy khám phá các dịch vụ mà chúng tôi cung cấp",
+      "viewServices": "Xem dịch vụ",
+      "detailTitle": "Chi tiết đặt dịch vụ #{{id}}",
+      "dateTime": "Ngày / Giờ",
+      "priceStatus": "Giá / Trạng thái",
+      "servicePrice": "Giá dịch vụ:",
+      "assignedKtv": "KTV phụ trách"
+    },
+    "customer": {
+      "loading": "Đang tải thông tin...",
+      "welcome": "Chào mừng, {{name}}!",
+      "settings": "Cài đặt tài khoản",
+      "orders": "Đơn hàng",
+      "bookedServices": "Dịch vụ đã đặt",
+      "pets": "Thú cưng",
+      "points": "Điểm tích lũy",
+      "myPets": "Thú cưng của tôi",
+      "addPet": "Thêm thú cưng",
+      "addPetPlus": "+ Thêm thú cưng",
+      "breed": "Giống:",
+      "age": "Tuổi:",
+      "ageValue": "{{age}} tuổi",
+      "noPets": "Bạn chưa có thú cưng nào",
+      "recentOrders": "Đơn hàng gần đây",
+      "accountInfo": "Thông tin tài khoản",
+      "editInfo": "Chỉnh sửa thông tin"
+    },
+    "settings": {
+      "title": "Cài đặt",
+      "subtitle": "Quản lý tài khoản và bảo mật",
+      "personalInfo": "Thông tin cá nhân",
+      "changePassword": "Đổi mật khẩu",
+      "privacy": "Quyền riêng tư",
+      "emailLocked": "Không thể thay đổi email",
+      "customerRole": "Khách hàng",
+      "currentPassword": "Mật khẩu hiện tại",
+      "newPassword": "Mật khẩu mới",
+      "confirmNewPassword": "Xác nhận mật khẩu mới",
+      "updatePassword": "Cập nhật mật khẩu",
+      "logoutDescription": "Bạn sẽ được đăng xuất khỏi tài khoản của mình.",
+      "updateSuccess": "Cập nhật thông tin thành công!",
+      "passwordMismatch": "Mật khẩu mới không khớp!",
+      "currentPasswordWrong": "Mật khẩu hiện tại không đúng!",
+      "passwordSuccess": "Đổi mật khẩu thành công!",
+      "logoutConfirm": "Bạn chắc chắn muốn đăng xuất?"
+    },
+    "customerPets": {
+      "title": "Thú cưng của tôi",
+      "subtitle": "Quản lý danh sách thú cưng",
+      "addNew": "Thêm thú cưng mới",
+      "name": "Tên thú cưng *",
+      "type": "Loại thú cưng *",
+      "breed": "Giống *",
+      "age": "Tuổi (năm) *",
+      "weight": "Cân nặng (kg) *",
+      "description": "Mô tả",
+      "namePlaceholder": "Ví dụ: Milo",
+      "breedPlaceholder": "Ví dụ: Golden Retriever",
+      "agePlaceholder": "Ví dụ: 3",
+      "weightPlaceholder": "Ví dụ: 28",
+      "descriptionPlaceholder": "Mô tả đặc điểm, tính cách của thú cưng...",
+      "save": "Lưu thú cưng",
+      "hideForm": "Ẩn form",
+      "edit": "Sửa",
+      "delete": "Xóa",
+      "emptyTitle": "Chưa có thú cưng nào",
+      "emptyDescription": "Thêm thú cưng đầu tiên của bạn",
+      "required": "Vui lòng điền đầy đủ các trường bắt buộc!",
+      "addSuccess": "Thêm thú cưng thành công!"
+    },
+    "adminBooking": {
+      "title": "Quản lý lịch hẹn",
+      "subtitle": "Theo dõi và quản lý tất cả lịch hẹn dịch vụ",
+      "searchPlaceholder": "Tìm theo khách hàng, pet, nhân viên...",
+      "petName": "Tên Pet",
+      "assignedStaff": "Nhân viên phụ trách",
+      "time": "Thời gian",
+      "empty": "Không có dữ liệu lịch hẹn",
+      "fetchError": "Không thể lấy dữ liệu"
+    }
+  }
+}

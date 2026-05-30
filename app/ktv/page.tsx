@@ -9,8 +9,10 @@ import { getCurrentUser } from '@/lib/auth';
 import { User } from '@/lib/mock-data';
 import { Calendar, Clock, CheckCircle, DollarSign } from 'lucide-react';
 import { getBookingsByKTV, getServiceBookings, getServiceById, getPetById, getBookingById, updateBooking } from '@/lib/storage';
+import { useTranslation } from 'react-i18next';
 
 export default function KTVDashboard() {
+  const { t } = useTranslation();
   const router = useRouter();
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [bookings, setBookings] = useState([]);
@@ -30,7 +32,7 @@ export default function KTVDashboard() {
   }, [router]);
 
   if (loading || !currentUser) {
-    return <div>Loading...</div>;
+    return <div>{t('common.loading.default')}</div>;
   }
 
   const totalBookings = bookings.length;
@@ -52,11 +54,11 @@ export default function KTVDashboard() {
 
   const getStatusLabel = (status: string) => {
     const labels: Record<string, string> = {
-      pending: 'Chờ xác nhận',
-      confirmed: 'Đã xác nhận',
-      'in-progress': 'Đang thực hiện',
-      completed: 'Hoàn thành',
-      cancelled: 'Đã hủy',
+      pending: t('common.status.pending'),
+      confirmed: t('common.status.confirmed'),
+      'in-progress': t('common.status.inProgress'),
+      completed: t('common.status.completed'),
+      cancelled: t('common.status.cancelled'),
     };
     return labels[status] || status;
   };
@@ -76,7 +78,7 @@ export default function KTVDashboard() {
         <section className="bg-white border-b">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <h1 className="text-3xl font-bold text-gray-900">KTV Dashboard</h1>
-            <p className="text-gray-600 mt-2">Quản lý các dịch vụ được giao</p>
+            <p className="text-gray-600 mt-2">{t('dashboard.ktv.subtitle')}</p>
           </div>
         </section>
 
@@ -85,10 +87,10 @@ export default function KTVDashboard() {
           {/* Stats */}
           <div className="grid md:grid-cols-4 gap-6 mb-12">
             {[
-              { icon: <Calendar className="w-6 h-6" />, label: 'Tổng dịch vụ', value: totalBookings, color: 'bg-blue-100 text-blue-600' },
-              { icon: <Clock className="w-6 h-6" />, label: 'Chờ xác nhận', value: pendingBookings, color: 'bg-yellow-100 text-yellow-600' },
-              { icon: <CheckCircle className="w-6 h-6" />, label: 'Đang thực hiện', value: inProgressBookings, color: 'bg-purple-100 text-purple-600' },
-              { icon: <DollarSign className="w-6 h-6" />, label: 'Hoàn thành', value: completedBookings, color: 'bg-green-100 text-green-600' },
+              { icon: <Calendar className="w-6 h-6" />, label: t('dashboard.ktv.totalServices'), value: totalBookings, color: 'bg-blue-100 text-blue-600' },
+              { icon: <Clock className="w-6 h-6" />, label: t('common.status.pending'), value: pendingBookings, color: 'bg-yellow-100 text-yellow-600' },
+              { icon: <CheckCircle className="w-6 h-6" />, label: t('common.status.inProgress'), value: inProgressBookings, color: 'bg-purple-100 text-purple-600' },
+              { icon: <DollarSign className="w-6 h-6" />, label: t('common.status.completed'), value: completedBookings, color: 'bg-green-100 text-green-600' },
             ].map((stat, index) => (
               <div key={index} className={`${stat.color} rounded-lg p-6`}>
                 <div className="mb-2">{stat.icon}</div>
@@ -102,24 +104,24 @@ export default function KTVDashboard() {
           <div className="bg-white border rounded-lg p-6 mb-12">
             <div className="flex items-center gap-2 mb-4">
               <DollarSign className="w-6 h-6 text-orange-600" />
-              <h2 className="text-xl font-bold text-gray-900">Tổng doanh thu</h2>
+              <h2 className="text-xl font-bold text-gray-900">{t('dashboard.revenue')}</h2>
             </div>
             <p className="text-4xl font-bold text-orange-600">
               {(totalRevenue / 1000).toFixed(0)}K VND
             </p>
-            <p className="text-gray-600 mt-2">Từ {totalBookings} dịch vụ đã thực hiện</p>
+            <p className="text-gray-600 mt-2">{t('dashboard.fromServices', { count: totalBookings })}</p>
           </div>
 
           {/* Bookings Management */}
           <div className="bg-white border rounded-lg p-6">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold text-gray-900">Danh sách dịch vụ</h2>
+              <h2 className="text-xl font-bold text-gray-900">{t('dashboard.ktv.serviceList')}</h2>
               <select className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-600 text-sm">
-                <option>Tất cả</option>
-                <option>Chờ xác nhận</option>
-                <option>Đã xác nhận</option>
-                <option>Đang thực hiện</option>
-                <option>Hoàn thành</option>
+                <option>{t('common.status.all')}</option>
+                <option>{t('common.status.pending')}</option>
+                <option>{t('common.status.confirmed')}</option>
+                <option>{t('common.status.inProgress')}</option>
+                <option>{t('common.status.completed')}</option>
               </select>
             </div>
 
@@ -132,25 +134,25 @@ export default function KTVDashboard() {
                     <div key={booking.id} className="border rounded-lg p-4 hover:shadow-md transition">
                       <div className="grid md:grid-cols-5 gap-4 items-start">
                         <div>
-                          <p className="text-xs text-gray-500 uppercase font-semibold">Dịch vụ</p>
+                          <p className="text-xs text-gray-500 uppercase font-semibold">{t('common.fields.service')}</p>
                           <p className="font-semibold text-gray-900">{service?.name}</p>
                         </div>
 
                         <div>
-                          <p className="text-xs text-gray-500 uppercase font-semibold">Thú cưng</p>
+                          <p className="text-xs text-gray-500 uppercase font-semibold">{t('common.fields.pet')}</p>
                           <p className="font-semibold text-gray-900">{pet?.name}</p>
                         </div>
 
                         <div>
-                          <p className="text-xs text-gray-500 uppercase font-semibold">Lịch</p>
+                          <p className="text-xs text-gray-500 uppercase font-semibold">{t('common.fields.schedule')}</p>
                           <p className="font-semibold text-gray-900">
-                            {new Date(booking.date).toLocaleDateString('vi-VN')}
+                            {new Date(booking.date).toLocaleDateString(t('common.currency.locale'))}
                           </p>
                           <p className="text-sm text-gray-600">{booking.time}</p>
                         </div>
 
                         <div>
-                          <p className="text-xs text-gray-500 uppercase font-semibold">Giá</p>
+                          <p className="text-xs text-gray-500 uppercase font-semibold">{t('common.fields.price')}</p>
                           <p className="font-bold text-orange-600">
                             {(booking.price / 1000).toFixed(0)}K
                           </p>
@@ -165,14 +167,14 @@ export default function KTVDashboard() {
                             variant="outline"
                             onClick={() => setSelectedBooking(booking)}
                           >
-                            Chi tiết
+                            {t('common.actions.details')}
                           </Button>
                         </div>
                       </div>
                       {booking.notes && (
                         <div className="mt-3 pt-3 border-t">
                           <p className="text-sm text-gray-600">
-                            <strong>Ghi chú:</strong> {booking.notes}
+                            <strong>{t('common.fields.notes')}:</strong> {booking.notes}
                           </p>
                         </div>
                       )}
@@ -181,7 +183,7 @@ export default function KTVDashboard() {
                 })
               ) : (
                 <div className="text-center py-12">
-                  <p className="text-gray-500">Không có dịch vụ nào được giao</p>
+                  <p className="text-gray-500">{t('dashboard.ktv.empty')}</p>
                 </div>
               )}
             </div>
@@ -191,7 +193,7 @@ export default function KTVDashboard() {
           {selectedBooking && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
               <div className="bg-white rounded-lg p-8 max-w-md w-full">
-                <h3 className="text-xl font-bold text-gray-900 mb-4">Cập nhật trạng thái dịch vụ</h3>
+                <h3 className="text-xl font-bold text-gray-900 mb-4">{t('dashboard.ktv.updateStatus')}</h3>
                 <p className="text-gray-600 mb-2">ID: #{selectedBooking.id}</p>
                 <p className="text-gray-600 mb-6">{getServiceById(selectedBooking.serviceId)?.name}</p>
 
@@ -216,7 +218,7 @@ export default function KTVDashboard() {
                   className="w-full"
                   onClick={() => setSelectedBooking(null)}
                 >
-                  Đóng
+                  {t('common.actions.close')}
                 </Button>
               </div>
             </div>

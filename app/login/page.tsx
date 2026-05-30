@@ -8,8 +8,10 @@ import { Button } from '@/components/ui/button';
 import { loginUser } from '@/lib/auth';
 import Link from 'next/link';
 import { AlertCircle } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export default function LoginPage() {
+  const { t } = useTranslation();
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -38,10 +40,10 @@ export default function LoginPage() {
           console.log("Đang tiến hành chuyển hướng tới:", targetPath);
           router.push(targetPath);
         } else {
-          setError('Email hoặc mật khẩu không đúng!');
+          setError(t('authPages.login.invalid'));
         }
       } catch (err: any) {
-        setError(err.message || 'Có lỗi xảy ra. Vui lòng thử lại!');
+        setError(err.message || t('authPages.genericError'));
       } finally {
         setLoading(false);
       }
@@ -63,10 +65,10 @@ export default function LoginPage() {
         <div className="max-w-md mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="bg-white border rounded-lg shadow-sm p-8">
             <h1 className="text-3xl font-bold text-gray-900 mb-2 text-center">
-              Đăng nhập
+              {t('authPages.login.title')}
             </h1>
             <p className="text-center text-gray-600 mb-6">
-              Đăng nhập vào tài khoản của bạn
+              {t('authPages.login.subtitle')}
             </p>
 
             {error && (
@@ -86,21 +88,21 @@ export default function LoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-600"
-                  placeholder="Nhập email của bạn"
+                  placeholder={t('authPages.login.emailPlaceholder')}
                   required
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Mật khẩu
+                  {t('common.fields.password')}
                 </label>
                 <input
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-600"
-                  placeholder="Nhập mật khẩu của bạn"
+                  placeholder={t('authPages.login.passwordPlaceholder')}
                   required
                 />
               </div>
@@ -110,15 +112,15 @@ export default function LoginPage() {
                 disabled={loading}
                 className="w-full bg-orange-600 hover:bg-orange-700 text-white font-semibold py-2"
               >
-                {loading ? 'Đang đăng nhập...' : 'Đăng nhập'}
+                {loading ? t('authPages.login.loading') : t('authPages.login.title')}
               </Button>
             </form>
 
             <div className="mt-6 text-center">
               <p className="text-gray-600 text-sm">
-                Chưa có tài khoản?{' '}
+                {t('authPages.login.noAccount')}{' '}
                 <Link href="/register" className="text-orange-600 hover:text-orange-700 font-semibold">
-                  Đăng ký ngay
+                  {t('authPages.login.registerNow')}
                 </Link>
               </p>
             </div>
@@ -126,7 +128,7 @@ export default function LoginPage() {
 
           {/* Demo Credentials */}
           <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <h3 className="font-semibold text-blue-900 mb-3">Tài khoản demo:</h3>
+            <h3 className="font-semibold text-blue-900 mb-3">{t('authPages.login.demoAccounts')}</h3>
             <div className="space-y-2 text-sm">
               {demoAccounts.map((account) => (
                 <div key={account.email} className="bg-white p-2 rounded border border-blue-100">

@@ -5,8 +5,10 @@ import { useParams } from "next/navigation";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import { nhanVienService } from "@/services/nhanVienService";
+import { useTranslation } from "react-i18next";
 
 export default function StaffDetailPage() {
+  const { t } = useTranslation();
   const { id } = useParams();
   const [staff, setStaff] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -45,15 +47,15 @@ export default function StaffDetailPage() {
       <main className="flex-1">
         <section className="bg-gradient-to-r from-orange-50 to-orange-100 py-16 text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            Thông Tin Nhân Viên
+            {t('staffDetail.title')}
           </h1>
         </section><section className="bg-gradient-to-r from-orange-50 to-orange-100 py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Về Cửa Hàng Thú Cưng
+              {t('about.title')}
             </h1>
             <p className="text-gray-600 text-lg">
-              Tìm hiểu về chúng tôi và hành trình chăm sóc thú cưng chuyên nghiệp
+              {t('about.description')}
             </p>
           </div>
         </section>
@@ -62,7 +64,7 @@ export default function StaffDetailPage() {
         <section className="py-16 md:py-24">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             {loading ? (
-              <p className="text-center text-gray-500">Đang tải dữ liệu...</p>
+              <p className="text-center text-gray-500">{t('staffDetail.loading')}</p>
             ) : staff ? (
               <div className="flex flex-col md:flex-row items-center gap-12 p-12 justify-center md:justify-start">
                 <div className="w-64 h-64 rounded-full border-4 border-orange-400 overflow-hidden shadow-lg flex-shrink-0">
@@ -83,21 +85,21 @@ export default function StaffDetailPage() {
                   </p>
 
                   <p className="text-gray-700 mb-2">
-                    <span className="font-semibold">Trình độ:</span> {staff?.trinhDo}
+                    <span className="font-semibold">{t('staffDetail.level')}</span> {staff?.trinhDo}
                   </p>
 
                   <p className="text-gray-700 mb-2">
-                    <span className="font-semibold">Kinh nghiệm:</span> {staff?.kinhNghiem}
+                    <span className="font-semibold">{t('staffDetail.experience')}</span> {staff?.kinhNghiem}
                   </p>
 
                   <p className="text-orange-600 font-semibold mt-4">
-                    <span className="font-semibold">SĐT:</span> {staff?.sdt || "Không có"}
+                    <span className="font-semibold">{t('staffDetail.phone')}</span> {staff?.sdt || t('common.fallbacks.none')}
                   </p>
 
                 </div>
               </div>
             ) : (
-              <p className="text-center text-gray-500">Không có dữ liệu nhân viên.</p>
+              <p className="text-center text-gray-500">{t('staffDetail.empty')}</p>
             )}
           </div>
         </section>

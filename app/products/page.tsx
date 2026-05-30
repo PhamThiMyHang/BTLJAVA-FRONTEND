@@ -10,8 +10,10 @@ import { useRouter } from 'next/navigation';
 import { sanPhamService } from '@/services/sanPhamService';
 import { gioHangService } from '@/services/gioHangService'; // Import gioHangService
 import { isAuthenticated, getCurrentUser } from '@/lib/auth'; // Import getCurrentUser
+import { useTranslation } from 'react-i18next';
 
 export default function ProductsPage() {
+  const { t } = useTranslation();
   const router = useRouter();
   const [products, setProducts] = useState<any[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<any[]>([]);
@@ -32,7 +34,7 @@ export default function ProductsPage() {
             name: item.tenSP,
             price: item.gia,
             quantity: item.soLuong,
-            shelf: item.viTri || 'Mặc định',
+            shelf: item.viTri || t('products.defaultShelf'),
             rating: 4.5
           }));
 
@@ -66,7 +68,7 @@ export default function ProductsPage() {
   // Xử lý gửi dữ liệu thêm vào giỏ hàng xuống API Backend
   const handleAddToCart = async (productId: string) => {
     if (!isAuthenticated()) {
-      alert('Vui lòng đăng nhập để thực hiện tính năng này!');
+      alert(t('common.messages.loginRequired'));
       router.push('/login'); 
       return;
     }
@@ -75,7 +77,7 @@ export default function ProductsPage() {
       // Lấy thông tin user đang đăng nhập
       const user = getCurrentUser() as any;
       if (!user || !user.userID) {
-        alert('Không tìm thấy thông tin người dùng. Vui lòng đăng nhập lại!');
+        alert(t('products.messages.missingUser'));
         return;
       }
 
@@ -95,10 +97,10 @@ export default function ProductsPage() {
         window.dispatchEvent(new Event('storage'));
         window.dispatchEvent(new Event('cartUpdate'));
       }
-      alert('Sản phẩm đã được thêm vào giỏ hàng thành công!');
+      alert(t('common.messages.addProductSuccess'));
     } catch (error) {
       console.error("Lỗi khi thêm sản phẩm vào giỏ hàng:", error);
-      alert('Có lỗi xảy ra khi thêm vào giỏ hàng. Vui lòng thử lại!');
+      alert(t('products.messages.addError'));
     }
   };
 
@@ -108,9 +110,9 @@ export default function ProductsPage() {
       <main className="flex-1">
         <section className="bg-gray-50 py-12 border-b">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">Sản phẩm</h1>
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">{t('products.title')}</h1>
             <p className="text-gray-600 text-lg">
-              Khám phá bộ sưu tập sản phẩm chất lượng cao cho thú cưng của bạn
+              {t('products.description')}
             </p>
           </div>
         </section>
@@ -121,7 +123,7 @@ export default function ProductsPage() {
               <div className="bg-gray-50 p-4 rounded-lg sticky top-20">
                 <div className="flex items-center gap-2 mb-4">
                   <Filter className="w-5 h-5 text-gray-700" />
-                  <h2 className="font-semibold text-gray-900">Danh mục</h2>
+                  <h2 className="font-semibold text-gray-900">{t('products.category')}</h2>
                 </div>
                 <div className="space-y-2">
                   <button
@@ -132,7 +134,7 @@ export default function ProductsPage() {
                         : 'text-gray-700 hover:bg-gray-200'
                     }`}
                   >
-                    Tất cả
+                    {t('products.all')}
                   </button>
                   {categories.map((category) => (
                     <button
@@ -154,14 +156,14 @@ export default function ProductsPage() {
             <div className="md:col-span-3">
               <input
                 type="text"
-                placeholder="Tìm kiếm sản phẩm..."
+                placeholder={t('products.searchPlaceholder')}
                 className="w-full p-3 border rounded-lg mb-6 focus:outline-none focus:ring-2 focus:ring-orange-500"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
               
               {loading ? (
-                <div className="text-center py-12 text-gray-500">Đang tải sản phẩm...</div>
+                <div className="text-center py-12 text-gray-500">{t('common.loading.products')}</div>
               ) : (
                 <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
                   {filteredProducts.length > 0 ? (
@@ -176,7 +178,7 @@ export default function ProductsPage() {
                               {product.name}
                             </h3>
                             <p className="text-sm text-gray-600 mb-3 flex-1">
-                              Số lượng còn {product.quantity}
+                              {t('products.stock', { count: product.quantity })}
                             </p>
                           </div>
                         </Link>
@@ -197,14 +199,14 @@ export default function ProductsPage() {
                             onClick={() => handleAddToCart(product.id)}
                           >
                             <ShoppingCart className="w-4 h-4 mr-2" />
-                            Thêm giỏ
+                            {t('common.actions.addCart')}
                           </Button>
                         </div>
                       </div>
                     ))
                   ) : (
                     <div className="col-span-3 text-center py-12">
-                      <p className="text-gray-500">Không có sản phẩm trong danh mục này</p>
+                      <p className="text-gray-500">{t('products.empty')}</p>
                     </div>
                   )}
                 </div>

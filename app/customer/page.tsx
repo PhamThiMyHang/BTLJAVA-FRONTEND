@@ -10,6 +10,7 @@ import { Package, Calendar, Heart, Settings, RefreshCw } from 'lucide-react';
 import { getCurrentUser } from '@/lib/auth';
 import { User } from '@/lib/mock-data';
 import { donHangService } from '@/services/donHangService';
+import { useTranslation } from 'react-i18next';
 
 interface DonHang {
   id: string | number;
@@ -46,6 +47,7 @@ interface Booking {
 }
 
 export default function CustomerDashboard() {
+  const { t } = useTranslation();
   const router = useRouter();
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [orders, setOrders] = useState<DonHang[]>([]);
@@ -99,19 +101,19 @@ export default function CustomerDashboard() {
   const getStatusLabel = (status?: string) => {
     const st = (status || '').toUpperCase();
     const labels: Record<string, string> = {
-      COMPLETED: 'Hoàn thành',
-      PENDING: 'Chờ xử lý',
-      PROCESSING: 'Đang xử lý',
-      SHIPPING: 'Đang vận chuyển',
-      CANCELLED: 'Đã hủy',
+      COMPLETED: t('common.status.completed'),
+      PENDING: t('dashboard.staff.pending'),
+      PROCESSING: t('common.status.processing'),
+      SHIPPING: t('dashboard.staff.shipping'),
+      CANCELLED: t('common.status.cancelled'),
     };
-    return labels[st] || status || 'Không xác định';
+    return labels[st] || status || t('common.status.unknown');
   };
 
   if (loading || !currentUser) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">
-        <p className="text-lg">Đang tải thông tin...</p>
+        <p className="text-lg">{t('dashboard.customer.loading')}</p>
       </div>
     );
   }
@@ -127,14 +129,14 @@ export default function CustomerDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-3xl font-bold text-gray-900">
-                  Chào mừng, {currentUser.name}! 👋
+                  {t('dashboard.customer.welcome', { name: currentUser.name })} 👋
                 </h1>
                 <p className="text-gray-600 mt-2">{currentUser.email}</p>
               </div>
               <Link href="/customer/settings">
                 <Button variant="outline" className="flex items-center gap-2">
                   <Settings className="w-4 h-4" />
-                  Cài đặt tài khoản
+                  {t('dashboard.customer.settings')}
                 </Button>
               </Link>
             </div>
@@ -145,10 +147,10 @@ export default function CustomerDashboard() {
           {/* Stats Cards */}
           <div className="grid md:grid-cols-4 gap-6 mb-12">
             {[
-              { icon: '🛍️', label: 'Đơn hàng', value: orders.length },
-              { icon: '📅', label: 'Dịch vụ đã đặt', value: bookings.length || 0 },
-              { icon: '🐾', label: 'Thú cưng', value: pets.length || 0 },
-              { icon: '⭐', label: 'Điểm tích lũy', value: (currentUser as any).points || 120 },
+              { icon: '🛍️', label: t('dashboard.customer.orders'), value: orders.length },
+              { icon: '📅', label: t('dashboard.customer.bookedServices'), value: bookings.length || 0 },
+              { icon: '🐾', label: t('dashboard.customer.pets'), value: pets.length || 0 },
+              { icon: '⭐', label: t('dashboard.customer.points'), value: (currentUser as any).points || 120 },
             ].map((stat, index) => (
               <div key={index} className="bg-white border rounded-xl p-6 text-center shadow-sm">
                 <div className="text-4xl mb-3">{stat.icon}</div>
@@ -165,11 +167,11 @@ export default function CustomerDashboard() {
                 <div className="flex items-center justify-between mb-6">
                   <h2 className="text-2xl font-bold flex items-center gap-3">
                     <Heart className="w-7 h-7 text-orange-600" />
-                    Thú cưng của tôi
+                    {t('dashboard.customer.myPets')}
                   </h2>
                   <Link href="/customer/pets/add">
                     <Button className="bg-orange-600 hover:bg-orange-700">
-                      + Thêm thú cưng
+                      {t('dashboard.customer.addPetPlus')}
                     </Button>
                   </Link>
                 </div>
@@ -184,22 +186,22 @@ export default function CustomerDashboard() {
                             {pet.type === 'cat' && '🐱'}
                           </div>
                           <h3 className="font-semibold text-xl">
-                            {pet.name || pet.tenThuCung || 'Thú cưng'}
+                            {pet.name || pet.tenThuCung || t('dashboard.customer.pets')}
                           </h3>
                         </div>
                         <div className="grid grid-cols-2 gap-2 text-sm">
-                          <p><strong>Giống:</strong> {pet.breed || pet.giong}</p>
-                          <p><strong>Tuổi:</strong> {pet.age || pet.tuoi} tuổi</p>
+                          <p><strong>{t('dashboard.customer.breed')}</strong> {pet.breed || pet.giong}</p>
+                          <p><strong>{t('dashboard.customer.age')}</strong> {t('dashboard.customer.ageValue', { age: pet.age || pet.tuoi })}</p>
                         </div>
                       </div>
                     ))}
                   </div>
                 ) : (
                   <div className="text-center py-12 bg-gray-50 rounded-xl">
-                    <p className="text-gray-500 mb-4">Bạn chưa có thú cưng nào</p>
+                    <p className="text-gray-500 mb-4">{t('dashboard.customer.noPets')}</p>
                     <Link href="/customer/pets/add">
                       <Button className="bg-orange-600 hover:bg-orange-700">
-                        Thêm thú cưng ngay
+                        {t('dashboard.customer.addPet')}
                       </Button>
                     </Link>
                   </div>
@@ -211,10 +213,10 @@ export default function CustomerDashboard() {
                 <div className="flex items-center justify-between mb-6">
                   <h2 className="text-2xl font-bold flex items-center gap-3">
                     <Package className="w-7 h-7 text-orange-600" />
-                    Đơn hàng gần đây
+                    {t('dashboard.customer.recentOrders')}
                   </h2>
                   <Link href="/customer/orders">
-                    <Button variant="outline" size="sm">Xem tất cả</Button>
+                    <Button variant="outline" size="sm">{t('common.actions.viewAll')}</Button>
                   </Link>
                 </div>
 
@@ -224,9 +226,9 @@ export default function CustomerDashboard() {
                       <div key={order.id} className="border rounded-xl p-5 hover:shadow transition">
                         <div className="flex justify-between items-start">
                           <div>
-                            <p className="font-semibold text-lg">Đơn hàng #{order.maDH || order.id}</p>
+                            <p className="font-semibold text-lg">{t('dashboard.orders.order')} #{order.maDH || order.id}</p>
                             <p className="text-sm text-gray-500">
-                              {new Date(order.ngayTao || order.createdAt || '').toLocaleDateString('vi-VN')}
+                              {new Date(order.ngayTao || order.createdAt || '').toLocaleDateString(t('common.currency.locale'))}
                             </p>
                           </div>
                           <span className={`px-4 py-1.5 rounded-full text-sm font-medium ${getStatusColor(order.trangThai)}`}>
@@ -234,7 +236,7 @@ export default function CustomerDashboard() {
                           </span>
                         </div>
                         <div className="mt-4 flex justify-between items-center border-t pt-4">
-                          <p className="text-gray-600">Tổng tiền</p>
+                          <p className="text-gray-600">{t('dashboard.orders.total')}</p>
                           <p className="text-xl font-bold text-orange-600">
                             {((order.tongTien || 0) / 1000).toFixed(0)}K ₫
                           </p>
@@ -244,9 +246,9 @@ export default function CustomerDashboard() {
                   </div>
                 ) : (
                   <div className="text-center py-12 bg-gray-50 rounded-xl">
-                    <p className="text-gray-500">Bạn chưa có đơn hàng nào</p>
+                    <p className="text-gray-500">{t('dashboard.orders.emptyTitle')}</p>
                     <Link href="/products" className="mt-4 inline-block">
-                      <Button className="bg-orange-600 hover:bg-orange-700">Mua sắm ngay</Button>
+                      <Button className="bg-orange-600 hover:bg-orange-700">{t('common.actions.shopNow')}</Button>
                     </Link>
                   </div>
                 )}
@@ -256,10 +258,10 @@ export default function CustomerDashboard() {
             {/* Sidebar */}
             <div className="md:col-span-1">
               <div className="bg-gray-50 border rounded-2xl p-6 sticky top-6">
-                <h3 className="font-semibold text-lg mb-5">Thông tin tài khoản</h3>
+                <h3 className="font-semibold text-lg mb-5">{t('dashboard.customer.accountInfo')}</h3>
                 <div className="space-y-4">
                   <div>
-                    <p className="text-gray-500 text-sm">Họ và tên</p>
+                    <p className="text-gray-500 text-sm">{t('common.fields.fullName')}</p>
                     <p className="font-medium">{currentUser.name}</p>
                   </div>
                   <div>
@@ -267,14 +269,14 @@ export default function CustomerDashboard() {
                     <p className="font-medium">{currentUser.email}</p>
                   </div>
                   <div>
-                    <p className="text-gray-500 text-sm">Số điện thoại</p>
-                    <p className="font-medium">{(currentUser as any).phone || 'Chưa cập nhật'}</p>
+                    <p className="text-gray-500 text-sm">{t('common.fields.phone')}</p>
+                    <p className="font-medium">{(currentUser as any).phone || t('common.fallbacks.notUpdated')}</p>
                   </div>
                 </div>
 
                 <Link href="/customer/settings" className="block mt-8">
                   <Button variant="outline" className="w-full">
-                    Chỉnh sửa thông tin
+                    {t('dashboard.customer.editInfo')}
                   </Button>
                 </Link>
               </div>

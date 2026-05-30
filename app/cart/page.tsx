@@ -9,6 +9,7 @@ import { getCurrentUser } from '@/lib/auth';
 import { gioHangService } from '@/services/gioHangService'; 
 import Link from 'next/link';
 import { Trash2, ArrowLeft } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 // Khai báo Interface khớp 100% với cấu trúc thuộc tính của GioHangDTO bên Spring Boot
 interface GioHangDTO {
@@ -23,6 +24,7 @@ interface GioHangDTO {
 }
 
 export default function CartPage() {
+  const { t } = useTranslation();
   const router = useRouter();
   const [cart, setCart] = useState<GioHangDTO[]>([]);
   const [cartTotal, setCartTotal] = useState<number>(0);
@@ -90,18 +92,18 @@ export default function CartPage() {
       window.dispatchEvent(new Event('cartUpdate'));
     } catch (error) {
       console.error("Lỗi khi thực hiện xóa sản phẩm:", error);
-      alert("Không thể xóa sản phẩm khỏi giỏ hàng. Vui lòng thử lại!");
+      alert(t('cart.messages.removeError'));
     }
   };
 
   // 3. Tiến hành xử lý đặt hàng
   const handleCheckout = () => {
     if (!address) {
-      alert('Vui lòng cung cấp địa chỉ nhận hàng!');
+      alert(t('cart.messages.addressRequired'));
       return;
     }
     if (cart.length === 0) {
-      alert('Giỏ hàng hiện tại đang trống!');
+      alert(t('cart.messages.emptyCart'));
       return;
     }
 
@@ -125,7 +127,7 @@ export default function CartPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white text-gray-700 font-medium text-lg">
-        Đang tải thông tin sản phẩm từ giỏ hàng...
+        {t('cart.loading')}
       </div>
     );
   }
@@ -137,7 +139,7 @@ export default function CartPage() {
       <main className="flex-1">
         <section className="bg-gray-50 py-8 border-b">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 className="text-4xl font-bold text-gray-900">Giỏ hàng</h1>
+            <h1 className="text-4xl font-bold text-gray-900">{t('cart.title')}</h1>
           </div>
         </section>
 
@@ -162,13 +164,13 @@ export default function CartPage() {
                         
                         <div className="flex items-center gap-4 mt-3">
                           <div className="text-orange-600 font-extrabold text-base">
-                            {(item.donGia*1000).toFixed(0)}vnđ
+                            {(item.donGia*1000).toFixed(0)}{t('common.currency.suffix')}
                           </div>
                           <div className="text-sm text-gray-500 font-medium">
-                            Số lượng: x{item.soLuong}
+                            {t('cart.quantity', { count: item.soLuong })}
                           </div>
                           <div className="font-bold text-gray-800 border-l pl-4">
-                            Thành tiền: {(item.thanhTien*1000).toFixed(0)}vnđ
+                            {t('cart.lineTotal', { amount: `${(item.thanhTien*1000).toFixed(0)}${t('common.currency.suffix')}` })}
                           </div>
                         </div>
                       </div>
@@ -177,7 +179,7 @@ export default function CartPage() {
                       <button
                         onClick={() => handleRemoveItem(item.maGioHang, item.maSP)}
                         className="text-gray-400 hover:text-red-600 transition p-2 rounded-full hover:bg-red-50"
-                        title="Xóa sản phẩm này"
+                        title={t('cart.removeTitle')}
                       >
                         <Trash2 className="w-5 h-5" />
                       </button>
@@ -187,7 +189,7 @@ export default function CartPage() {
 
                 <Link href="/products">
                   <Button variant="outline" className="flex items-center gap-2 border-gray-300">
-                    <ArrowLeft className="w-4 h-4" /> Quay lại cửa hàng tìm thêm sản phẩm
+                    <ArrowLeft className="w-4 h-4" /> {t('cart.backToShop')}
                   </Button>
                 </Link>
               </div>
@@ -195,26 +197,26 @@ export default function CartPage() {
               {/* Tóm tắt chi phí & Điền thông tin giao nhận hàng */}
               <div className="md:col-span-1">
                 <div className="bg-gray-50 border rounded-lg p-6 sticky top-20 shadow-sm">
-                  <h2 className="text-xl font-bold text-gray-900 mb-6">Tóm tắt đơn hàng</h2>
+                  <h2 className="text-xl font-bold text-gray-900 mb-6">{t('cart.summary')}</h2>
 
                   {!checkout ? (
                     <>
                       <div className="space-y-3 mb-6">
                         <div className="flex items-center justify-between">
-                          <span className="text-gray-600 font-medium">Tạm tính sản phẩm</span>
+                          <span className="text-gray-600 font-medium">{t('cart.subtotal')}</span>
                           <span className="font-bold text-gray-900">
-                            {(cartTotal * 1000).toFixed(0)}vnđ
+                            {(cartTotal * 1000).toFixed(0)}{t('common.currency.suffix')}
                           </span>
                         </div>
                         <div className="flex items-center justify-between">
-                          <span className="text-gray-600 font-medium">Phí giao hàng</span>
-                          <span className="font-bold text-gray-900">30000vnđ</span>
+                          <span className="text-gray-600 font-medium">{t('cart.shippingFee')}</span>
+                          <span className="font-bold text-gray-900">30000{t('common.currency.suffix')}</span>
                         </div>
                       </div>
 
                       <div className="border-t pt-4 mb-6">
                         <div className="flex items-center justify-between">
-                          <span className="font-bold text-gray-900 text-base">Tổng số tiền cần trả</span>
+                          <span className="font-bold text-gray-900 text-base">{t('cart.total')}</span>
                           <span className="text-2xl font-black text-orange-600">
                             {((cartTotal + 30) * 1000).toFixed(0)}K
                           </span>
@@ -225,33 +227,33 @@ export default function CartPage() {
                         className="w-full bg-orange-600 hover:bg-orange-700 text-white font-semibold py-2.5 transition shadow"
                         onClick={() => setCheckout(true)}
                       >
-                        Tiến hành điền thông tin giao hàng
+                        {t('cart.checkoutInfo')}
                       </Button>
                     </>
                   ) : (
                     <>
                       <div className="space-y-4 mb-6">
                         <div>
-                          <label className="block text-sm font-semibold text-gray-700 mb-2">Địa chỉ nhận hàng</label>
+                          <label className="block text-sm font-semibold text-gray-700 mb-2">{t('cart.shippingAddress')}</label>
                           <input
                             type="text"
                             value={address}
                             onChange={(e) => setAddress(e.target.value)}
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm bg-white"
-                            placeholder="Số nhà, tên đường, phường/xã, quận/huyện..."
+                            placeholder={t('cart.addressPlaceholder')}
                           />
                         </div>
 
                         <div>
-                          <label className="block text-sm font-semibold text-gray-700 mb-2">Hình thức thanh toán</label>
+                          <label className="block text-sm font-semibold text-gray-700 mb-2">{t('cart.paymentMethod')}</label>
                           <select
                             value={paymentMethod}
                             onChange={(e) => setPaymentMethod(e.target.value)}
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm bg-white"
                           >
-                            <option value="cash">Thanh toán khi nhận hàng (COD)</option>
-                            <option value="bank_transfer">Chuyển khoản tài khoản ngân hàng</option>
-                            <option value="credit_card">Thẻ tín dụng / Quốc tế</option>
+                            <option value="cash">{t('cart.payment.cash')}</option>
+                            <option value="bank_transfer">{t('cart.payment.bank')}</option>
+                            <option value="credit_card">{t('cart.payment.card')}</option>
                           </select>
                         </div>
                       </div>
@@ -260,7 +262,7 @@ export default function CartPage() {
                         className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 mb-2 transition shadow"
                         onClick={handleCheckout}
                       >
-                        Xác nhận đặt đơn hàng ngay
+                        {t('cart.confirmOrder')}
                       </Button>
 
                       <Button 
@@ -268,7 +270,7 @@ export default function CartPage() {
                         className="w-full border-gray-300 text-gray-600 hover:bg-gray-100" 
                         onClick={() => setCheckout(false)}
                       >
-                        Quay lại kiểm tra sản phẩm
+                        {t('cart.backToReview')}
                       </Button>
                     </>
                   )}
@@ -278,11 +280,11 @@ export default function CartPage() {
           ) : (
             <div className="text-center py-20 bg-gray-50 rounded-xl border border-dashed border-gray-300">
               <div className="text-7xl mb-4">🛒</div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">Giỏ hàng của bạn đang trống</h2>
-              <p className="text-gray-500 mb-6 max-w-sm mx-auto text-sm">Bạn chưa thêm món đồ hay bé thú cưng nào vào giỏ. Hãy quay lại cửa hàng để lựa chọn nhé!</p>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">{t('cart.emptyTitle')}</h2>
+              <p className="text-gray-500 mb-6 max-w-sm mx-auto text-sm">{t('cart.emptyDescription')}</p>
               <Link href="/products">
                 <Button className="bg-orange-600 hover:bg-orange-700 text-white font-medium px-6 py-2">
-                  Bắt đầu mua sắm ngay
+                  {t('cart.startShopping')}
                 </Button>
               </Link>
             </div>
