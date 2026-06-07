@@ -100,7 +100,7 @@ export default function AboutPage() {
               <div className="bg-gray-200 h-80 rounded-lg flex items-center justify-center text-6xl overflow-hidden 0">
              
                 <img 
-                  src="\pet-banner.png" 
+                  src="https://res.cloudinary.com/dqxh96t1h/image/upload/v1780327558/pet-shop4_jd9lhr.png" 
                   alt={t('about.imageAlt')}
                   className="h-64 w-auto object-contain rounded-lg"
                 />

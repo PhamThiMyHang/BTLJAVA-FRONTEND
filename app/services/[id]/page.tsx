@@ -10,6 +10,7 @@ import Link from 'next/link';
 import { dichVuService } from '@/services/dichVuService';
 import { getCurrentUser } from '@/lib/auth';
 import { useTranslation } from 'react-i18next';
+import { ServiceImage } from '@/components/ServiceImage';
 
 // === HÀM FORMAT GIÁ ĐÃ SỬA ===
 const formatPrice = (gia: number | string, locale: string): string => {
@@ -116,13 +117,8 @@ export default function ServiceDetailPage() {
 
           <div className="grid lg:grid-cols-2 gap-12">
             <div className="space-y-6">
-              <div className="aspect-square bg-gradient-to-br from-orange-100 to-amber-50 rounded-3xl flex items-center justify-center text-[180px]">
-                {service.category === 'Grooming' && '✂️'}
-                {service.category === 'Spa' && '🛁'}
-                {service.category === 'Hotel' && '🏨'}
-                {service.category === 'Healthcare' && '💊'}
-                {service.category === 'Training' && '🎓'}
-                {!service.category && '🐾'}
+              <div className="aspect-square w-full rounded-3xl overflow-hidden border border-gray-100">
+                <ServiceImage service={service} />
               </div>
             </div>
 

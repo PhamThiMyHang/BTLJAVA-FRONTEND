@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { dichVuService } from '@/services/dichVuService';
 import { useTranslation } from 'react-i18next';
+import { ServiceImage } from '@/components/ServiceImage';
 
 // === HÀM FORMAT GIÁ ĐÃ SỬA ===
 const formatPrice = (gia: number | string, locale: string): string => {
@@ -62,6 +63,7 @@ export default function ServicesPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('TatCa');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -169,13 +171,9 @@ export default function ServicesPage() {
                       className="group bg-white border border-gray-200 rounded-3xl overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-1"
                     >
                       <div className="grid md:grid-cols-12 gap-8 p-8">
-                        <div className="md:col-span-4 bg-gradient-to-br from-orange-100 to-amber-50 rounded-2xl h-64 flex items-center justify-center text-8xl border border-orange-100">
-                          {service.category === 'Grooming' && '✂️'}
-                          {service.category === 'Spa' && '🛁'}
-                          {service.category === 'Hotel' && '🏨'}
-                          {service.category === 'Healthcare' && '💊'}
-                          {service.category === 'Training' && '🎓'}
-                          {!service.category && '🐾'}
+                        
+                        <div className="md:col-span-4 relative h-64 rounded-2xl overflow-hidden border border-gray-100 bg-gray-50">
+                          <ServiceImage service={service} />
                         </div>
 
                         <div className="md:col-span-8 flex flex-col justify-between">

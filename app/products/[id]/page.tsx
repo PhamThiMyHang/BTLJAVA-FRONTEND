@@ -8,8 +8,10 @@ import { Button } from '@/components/ui/button';
 import { Star, ShoppingCart, Heart, Share2 } from 'lucide-react';
 import Link from 'next/link';
 import { isAuthenticated, getCurrentUser } from '@/lib/auth'; // Import các hàm auth
-import { gioHangService } from '@/services/gioHangService'; // Import gioHangService
+import { gioHangService } from '@/services/gioHangService';
+import { yeuThichService } from '@/services/yeuThichService';
 import { useTranslation } from 'react-i18next';
+
 
 export default function ProductDetailPage() {
   const { t } = useTranslation();
@@ -36,6 +38,7 @@ export default function ProductDetailPage() {
           price: item.gia,
           quantity: item.soLuong,
           shelf: item.viTri,
+          urlImg: item.urlImg, // BỔ SUNG DÒNG NÀY
           rating: 4.5
         };
 
@@ -58,6 +61,7 @@ export default function ProductDetailPage() {
           price: item.gia,
           quantity: item.soLuong,
           shelf: item.viTri,
+          urlImg: item.urlImg, // BỔ SUNG DÒNG NÀY
           rating: 4.5
         }));
 
@@ -68,6 +72,64 @@ export default function ProductDetailPage() {
         setRelatedProducts(related);
       });
   }, [product]);
+
+
+  
+  // 1. Thêm state trong component
+const [isLiked, setIsLiked] = useState(false);
+const [likeCount, setLikeCount] = useState(0);
+
+// 2. Kiểm tra trạng thái yêu thích khi trang load
+useEffect(() => {
+  if (product && isAuthenticated()) {
+    const user = getCurrentUser() as any;
+    yeuThichService.exists(String(user.userID), String(product.id))
+      .then((res:any)  => setIsLiked(res.data))
+      .catch(() => setIsLiked(false));
+  }
+}, [product]);
+
+// Số lượt thích
+useEffect(() => {
+  if (!product) return;
+
+  yeuThichService.count(product.id)
+    .then((res: any) => {
+      setLikeCount(res.data);
+    })
+    .catch((err) => {
+      console.error("Lỗi lấy số lượt thích:", err);
+    });
+}, [product]);
+
+const handleToggleLike = async () => {
+  if (!isAuthenticated()) {
+    router.push('/login');
+    return;
+  }
+  const user = getCurrentUser() as any;
+  console.log(user);
+  if (!user) {
+    router.push('/login');
+    return;
+  }
+  try {
+    if (isLiked) {
+      // Gọi service delete (đã chuẩn hóa)
+      await yeuThichService.delete(String(user.userID), String(product.id));
+      setIsLiked(false);
+      setLikeCount(prev => Math.max(0, prev - 1));
+    } else {
+      // Gọi service add
+      await yeuThichService.add({ maUser: String(user.userID), maSP: String(product.id) });
+      setIsLiked(true);
+      setLikeCount(prev => prev + 1);
+    }
+  } catch (err) {
+    console.error("Lỗi:", err);
+  }
+};
+
 
   if (loading || !product) {
     return <div className="min-h-screen flex items-center justify-center">{t('common.loading.default')}</div>;
@@ -137,8 +199,16 @@ export default function ProductDetailPage() {
 
           <div className="grid md:grid-cols-2 gap-12 mb-16">
             <div>
-              <div className="bg-gray-200 rounded-lg h-96 flex items-center justify-center text-6xl mb-4">
-                📦
+              <div className="bg-gray-100 rounded-lg h-96 flex items-center justify-center overflow-hidden border">
+                {product.urlImg ? (
+                  <img 
+                    src={product.urlImg} 
+                    alt={product.name} 
+                    className="w-full h-full object-contain p-4" // object-contain giúp ảnh không bị cắt
+                  />
+                ) : (
+                  <span className="text-6xl">📦</span>
+                )}
               </div>
             </div>
 
@@ -212,8 +282,18 @@ export default function ProductDetailPage() {
                 </div>
 
                 <div className="flex gap-4">
-                  <Button variant="outline" className="flex-1 flex items-center justify-center gap-2">
-                    <Heart className="w-5 h-5" /> {t('productDetail.favorite')}
+                  <Button
+                    variant="outline"
+                    className={`flex-1 flex items-center justify-center transition-all duration-300 gap-2 ${
+                      isLiked ? 'text-red-500 border-red-500' : ''
+                    }`}
+                    onClick={handleToggleLike}
+                  >
+                    <Heart className={`w-5 h-5 ${isLiked ? 'fill-red-500' : ''}`} />
+
+                    <span>
+                      {likeCount} {t('productDetail.favorite')}
+                    </span>
                   </Button>
                   <Button variant="outline" className="flex-1 flex items-center justify-center gap-2">
                     <Share2 className="w-5 h-5" /> {t('productDetail.share')}
@@ -242,8 +322,16 @@ export default function ProductDetailPage() {
                 {relatedProducts.map((rel) => (
                   <Link key={rel.id} href={`/products/${rel.id}`}>
                     <div className="bg-white border rounded-lg overflow-hidden hover:shadow-lg transition cursor-pointer h-full">
-                      <div className="bg-gray-200 h-48 flex items-center justify-center text-4xl">
-                        📦
+                      <div className="bg-gray-200 h-48 flex items-center justify-center overflow-hidden">
+                        {rel.urlImg ? (
+                          <img 
+                            src={rel.urlImg} 
+                            alt={rel.name} 
+                            className="w-full h-full object-cover" 
+                          />
+                        ) : (
+                          <span className="text-4xl">📦</span>
+                        )}
                       </div>
                       <div className="p-4">
                         <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2">

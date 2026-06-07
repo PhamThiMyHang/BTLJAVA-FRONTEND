@@ -45,19 +45,12 @@ export default function StaffDetailPage() {
       <Header />
 
       <main className="flex-1">
+      
         <section className="bg-gradient-to-r from-orange-50 to-orange-100 py-16 text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
             {t('staffDetail.title')}
           </h1>
-        </section><section className="bg-gradient-to-r from-orange-50 to-orange-100 py-16">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              {t('about.title')}
-            </h1>
-            <p className="text-gray-600 text-lg">
-              {t('about.description')}
-            </p>
-          </div>
+           <p>{t('about.description')}</p>
         </section>
 
 

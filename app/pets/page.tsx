@@ -50,10 +50,13 @@ export default function PetsPage() {
     
   ];
   const images = [
-    "/pet-banner.png",
-    "/pet-banner.png",
-    "/pet-banner.png",
-    "/pet-banner.png",
+    "https://res.cloudinary.com/dqxh96t1h/image/upload/v1780327565/pet-shop1_temifa.png",
+    "https://res.cloudinary.com/dqxh96t1h/image/upload/v1780327555/pet-shop2_hex8we.jpg",
+    "https://res.cloudinary.com/dqxh96t1h/image/upload/v1780327562/pet-shop3_w76tra.png",
+    "https://res.cloudinary.com/dqxh96t1h/image/upload/v1780327561/pet-shop5_bjlqmp.png",
+    "https://res.cloudinary.com/dqxh96t1h/image/upload/v1780327562/pet-shop6_kjqfjf.png",
+    "https://res.cloudinary.com/dqxh96t1h/image/upload/v1780327561/pet-shop7_qtghfm.png",
+    "https://res.cloudinary.com/dqxh96t1h/image/upload/v1780327558/pet-shop4_jd9lhr.png"
   ];
 
   const [currentIndex, setCurrentIndex] = useState(0);

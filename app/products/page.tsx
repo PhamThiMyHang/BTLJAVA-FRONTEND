@@ -35,6 +35,7 @@ export default function ProductsPage() {
             price: item.gia,
             quantity: item.soLuong,
             shelf: item.viTri || t('products.defaultShelf'),
+            urlImg: item.urlImg, // Đảm bảo field này được lấy từ backend
             rating: 4.5
           }));
 
@@ -104,6 +105,8 @@ export default function ProductsPage() {
     }
   };
 
+  
+
   return (
     <div className="min-h-screen bg-white flex flex-col">
       <Header />
@@ -171,7 +174,16 @@ export default function ProductsPage() {
                       <div key={product.id} className="bg-white border rounded-lg overflow-hidden hover:shadow-lg transition h-full flex flex-col">
                         <Link href={`/products/${product.id}`} className="flex-1 flex flex-col group">
                           <div className="bg-gray-200 h-48 flex items-center justify-center text-gray-400 text-4xl select-none">
-                            📦
+                            {product.urlImg ? (
+                              <img 
+                                src={product.urlImg || '/default-product.png'} 
+                                onError={(e) => { e.currentTarget.src = '/default-product.png'; }}
+                                alt={product.name} 
+                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                              />
+                            ) : (
+                              <span className="text-gray-400 text-4xl">📦</span>
+                            )}
                           </div>
                           <div className="p-4 flex-1 flex flex-col">
                             <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-orange-600 transition">
