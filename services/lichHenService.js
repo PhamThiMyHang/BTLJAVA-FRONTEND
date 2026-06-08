@@ -38,6 +38,27 @@ export const lichHenService = {
         return { ...res, data: items };
     },
 
+    // Cập nhật trạng thái lịch hẹn (dùng cho thanh toán): fetch lịch gốc rồi PUT với trangThai mới
+    updateTrangThai: async (maLich, trangThaiMoi) => {
+        const res = await apiClient.get(`/api/lich-hen/${maLich}`);
+        let current = res.data;
+        if (current && current.data && !Array.isArray(current.data)) {
+            current = current.data;
+        }
+        if (!current || !current.maKH) {
+            throw new Error('Không lấy được thông tin lịch hẹn');
+        }
+        const payload = {
+            maKH: current.maKH,
+            maPet: current.maPet || '',
+            maNV: current.maNV || '',
+            maDV: current.maDV,
+            thoiGian: current.thoiGian,
+            trangThai: trangThaiMoi,
+        };
+        return apiClient.put(`/api/lich-hen/${maLich}`, payload);
+    },
+
     // Hủy lịch hẹn: fetch lịch gốc rồi gửi lại toàn bộ fields với trangThai = DA_HUY
     cancelLichHen: async (maLich) => {
         // Lấy thông tin lịch hẹn hiện tại

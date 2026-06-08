@@ -41,6 +41,8 @@ interface LichHenDTO {
   maDV: string;
   tenDV: string;
   giaDV: number;
+  gia?: number;          // alias backend có thể trả về
+  giaDichVu?: number;    // alias khác
   thoiGian: string;
   trangThai: string;
 }
@@ -152,9 +154,20 @@ export default function CartPage() {
 
       // Sản phẩm
       const res = await gioHangService.getByMaUser(maUser);
-      let rawItems = res.data ?? res ?? [];
+      // apiClient interceptor có thể đã unwrap .data, hoặc chưa
+      let rawItems: any = res.data ?? res ?? [];
+      // Nếu backend bọc trong {status, message, data: [...]}
+      if (rawItems && !Array.isArray(rawItems) && rawItems.data) {
+        rawItems = rawItems.data;
+      }
       if (!Array.isArray(rawItems)) rawItems = [];
-      const products: GioHangDTO[] = rawItems;
+      // Chuẩn hóa giá: đảm bảo donGia và thanhTien luôn là số
+      const products: GioHangDTO[] = rawItems.map((item: any) => ({
+        ...item,
+        donGia: Number(item.donGia ?? item.gia ?? item.giaSP ?? 0),
+        thanhTien: Number(item.thanhTien ?? item.tongTien ?? ((item.soLuong || 1) * Number(item.donGia ?? item.gia ?? 0))),
+        soLuong: Number(item.soLuong ?? 1),
+      }));
 
       // Tính tổng tiền sản phẩm
       let cartTotal = 0;
@@ -195,8 +208,8 @@ export default function CartPage() {
         id: l.maLich,
         type: 'service',
         name: l.tenDV || `Dịch vụ ${l.maDV}`,
-        price: Number(l.giaDV || 0),
-        total: Number(l.giaDV || 0),
+        price: Number(l.giaDV ?? l.gia ?? l.giaDichVu ?? 0),
+        total: Number(l.giaDV ?? l.gia ?? l.giaDichVu ?? 0),
         status: l.trangThai,
         scheduledAt: l.thoiGian,
         staffName: l.tenNV,
@@ -325,7 +338,7 @@ export default function CartPage() {
           tongTien: productTotal + (hasProduct ? SHIPPING_FEE : 0),
           chiTietDonHang: selectedProducts.map(item => {
             const p = item.raw as GioHangDTO;
-            return { maSP: p.maSP, soLuong: p.soLuong, donGia: p.donGia };
+            return { maSP: p.maSP, soLuong: item.qty ?? p.soLuong ?? 1, donGia: item.price ?? p.donGia };
           }),
         };
         const res = await donHangService.createDonHang(payload);
@@ -333,15 +346,15 @@ export default function CartPage() {
         newOrderId = resData?.maDH || resData?.data?.maDH || ('DH' + Date.now());
       }
 
-      // Nếu có dịch vụ được chọn, cập nhật trạng thái sang CHO_THANH_TOAN
+      // Nếu có dịch vụ được chọn, cập nhật trạng thái sang DA_XAC_NHAN (đã thanh toán)
       for (const svcItem of selectedServices) {
         const lich = svcItem.raw as LichHenDTO;
         try {
-          // Fetch lịch hẹn hiện tại rồi cập nhật trạng thái
-          await lichHenService.cancelLichHen; // just using the service, update status
-          // Thực ra chỉ đánh dấu là đã thanh toán/xác nhận
-          // Tuỳ backend: nếu không có endpoint riêng, bỏ qua
-        } catch { /* ignore */ }
+          const trangThaiMoi = paymentMethod === 'cash' ? 'DA_XAC_NHAN' : 'DA_XAC_NHAN';
+          await lichHenService.updateTrangThai(lich.maLich, trangThaiMoi);
+        } catch (err) {
+          console.warn('Không thể cập nhật trạng thái lịch hẹn:', lich.maLich, err);
+        }
       }
 
       setOrderId(newOrderId || ('ORDER' + Date.now()));
