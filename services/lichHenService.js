@@ -20,7 +20,25 @@ export const lichHenService = {
 
     // GET /api/lich-hen/search - Tìm kiếm lịch hẹn
     searchLichHen: (params) =>
-        apiClient.get('/api/lich-hen/search', { params })
+        apiClient.get('/api/lich-hen/search', { params }),
+
+
+    // =========================
+    // THỐNG KÊ DOANH THU
+    // =========================
+
+    // Tổng doanh thu toàn cửa hàng
+    getTongDoanhThu: () =>
+        apiClient.get('/api/lich-hen/tong-doanh-thu'),
+
+    // Doanh thu tất cả nhân viên
+    getDoanhThuNhanVien: () =>
+        apiClient.get('/api/lich-hen/doanh-thu-nhan-vien'),
+
+    // Doanh thu 1 nhân viên theo mã nhân viên
+    getDoanhThuNhanVienByMaNV: (maNV) =>
+        apiClient.get(`/api/lich-hen/doanh-thu-nhan-vien/${maNV}`)
+
 };
 
 export default lichHenService;

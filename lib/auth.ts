@@ -53,6 +53,7 @@ export async function loginUser(gmailInput: string, passwordInput: string) {
     }
 
     const userDTO = result.data; // Đây là UserDTO từ Spring Boot trả ra
+    console.log(userDTO);
 
     // Lấy role đầu tiên trong Set<String> roles của UserDTO
     let primaryRole = 'customer';
@@ -68,7 +69,14 @@ export async function loginUser(gmailInput: string, passwordInput: string) {
       username: userDTO.username,
       gmail: userDTO.gmail,
       role: primaryRole.replace(/\r/g, '').toLowerCase().trim(), // Ép về chữ thường (admin, staff, ktv...)
-      createdAt: new Date().toISOString()
+
+       maNV: userDTO.maNV,
+      tenNV: userDTO.tenNV,
+
+      maKH: userDTO.maKH,
+      tenKH: userDTO.tenKH,
+
+createdAt: new Date().toISOString()
     };
 
     // 2. LƯU TRẠNG THÁI ĐĂNG NHẬP: Ghi nhận thông tin user vào LocalStorage
