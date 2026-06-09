@@ -32,4 +32,4 @@ apiClient.interceptors.response.use(
 );
 
 // Hỗ trợ cả kiểu import cũ (không ngoặc nhọn) cho các file khác trong dự án
-export default apiClient;
+//export default apiClient;

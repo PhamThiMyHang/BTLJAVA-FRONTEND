@@ -37,7 +37,16 @@ export const lichHenService = {
 
     // Doanh thu 1 nhân viên theo mã nhân viên
     getDoanhThuNhanVienByMaNV: (maNV) =>
-        apiClient.get(`/api/lich-hen/doanh-thu-nhan-vien/${maNV}`)
+        apiClient.get(`/api/lich-hen/doanh-thu-nhan-vien/${maNV}`),
+
+
+    // =========================
+    // THỐNG KÊ LỊCH HẸN
+    // =========================
+
+    // Tổng số lịch hẹn, số pending, confirmed,...
+    getSummary: () =>
+        apiClient.get('/api/lich-hen/summary'),
 
 };
 

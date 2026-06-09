@@ -8,22 +8,26 @@ import { ArrowUpDown, Search } from 'lucide-react';
 import { getCurrentUser } from '@/lib/auth';
 import { User } from '@/lib/mock-data';
 import { useTranslation } from 'react-i18next';
+import { lichHenService } from '@/services/lichHenService';
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { CalendarDays } from "lucide-react";
 
 type Booking = {
-  id: number;
-  customerName: string;
-  petName: string;
-  serviceName: string;
-  staffName: string;
-  bookingTime: string;
-  status: 'pending' | 'confirmed' | 'completed' | 'cancelled';
+  maLich: string;
+  tenKH: string;
+  tenPet: string;
+  tenDV: string;
+  tenNV: string;
+  thoiGian: string;
+  trangThai: string;
 };
 
 type SortField =
-  | 'customerName'
-  | 'petName'
-  | 'staffName'
-  | 'bookingTime';
+  | 'tenKH'
+  | 'tenPet'
+  | 'tenNV'
+  | 'thoiGian';
 
 export default function BookingManagementPage() {
   const { t } = useTranslation();
@@ -34,12 +38,18 @@ export default function BookingManagementPage() {
 
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [search, setSearch] = useState('');
+  const [statusFilter, setStatusFilter] = useState('ALL');
 
   const [sortField, setSortField] =
-    useState<SortField>('bookingTime');
+    useState<SortField>('thoiGian');
 
   const [sortOrder, setSortOrder] =
     useState<'asc' | 'desc'>('desc');
+
+  const [fromDate, setFromDate] = useState<Date>();
+  const [toDate, setToDate] = useState<Date>();
+  const [fromOpen, setFromOpen] = useState(false);
+  const [toOpen, setToOpen] = useState(false);
 
   // Kiểm tra quyền admin
   useEffect(() => {
@@ -58,17 +68,9 @@ export default function BookingManagementPage() {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const response = await fetch(
-          'http://localhost:8080/api/bookings'
-        );
+        const res = await lichHenService.getAllLichHen();
 
-        if (!response.ok) {
-          throw new Error(t('dashboard.adminBooking.fetchError'));
-        }
-
-        const data = await response.json();
-
-        setBookings(data);
+        setBookings(res.data);
       } catch (error) {
         console.error('Lỗi lấy dữ liệu lịch hẹn:', error);
       }
@@ -92,18 +94,45 @@ export default function BookingManagementPage() {
     const filtered = bookings.filter((booking) => {
       const keyword = search.toLowerCase();
 
+      const matchKeyword =
+        booking.tenKH.toLowerCase().includes(keyword) ||
+        booking.tenPet.toLowerCase().includes(keyword) ||
+        booking.tenNV.toLowerCase().includes(keyword) ||
+        booking.tenDV.toLowerCase().includes(keyword);
+
+      const bookingDate = new Date(booking.thoiGian);
+
+      const matchStatus =
+        statusFilter === 'ALL' ||
+        booking.trangThai === statusFilter;
+
+      const matchFromDate =
+        !fromDate || bookingDate >= fromDate;
+
+      const matchToDate =
+        !toDate ||
+        bookingDate <= new Date(
+          toDate.getFullYear(),
+          toDate.getMonth(),
+          toDate.getDate(),
+          23,
+          59,
+          59
+        );
       return (
-        booking.customerName.toLowerCase().includes(keyword) ||
-        booking.petName.toLowerCase().includes(keyword) ||
-        booking.staffName.toLowerCase().includes(keyword) ||
-        booking.serviceName.toLowerCase().includes(keyword)
+        matchKeyword &&
+        matchStatus &&
+        matchFromDate &&
+        matchToDate
       );
+
+      return matchKeyword && matchStatus;
     });
 
     filtered.sort((a, b) => {
-      if (sortField === 'bookingTime') {
-        const timeA = new Date(a.bookingTime).getTime();
-        const timeB = new Date(b.bookingTime).getTime();
+      if (sortField === 'thoiGian') {
+        const timeA = new Date(a.thoiGian).getTime();
+        const timeB = new Date(b.thoiGian).getTime();
 
         return sortOrder === 'asc'
           ? timeA - timeB
@@ -119,7 +148,7 @@ export default function BookingManagementPage() {
     });
 
     return filtered;
-  }, [bookings, search, sortField, sortOrder]);
+  }, [bookings, search, statusFilter, fromDate, toDate, sortField, sortOrder]);
 
   const formatDateTime = (date: string) => {
     return new Date(date).toLocaleString(t('common.currency.locale'), {
@@ -133,16 +162,19 @@ export default function BookingManagementPage() {
 
   const getStatusStyle = (status: string) => {
     switch (status) {
-      case 'pending':
+      case 'PENDING':
         return 'bg-yellow-100 text-yellow-700';
 
-      case 'confirmed':
+      case 'CONFIRMED':
         return 'bg-blue-100 text-blue-700';
 
-      case 'completed':
+      case 'IN_PROGRESS':
+        return 'bg-purple-100 text-purple-700';
+
+      case 'DONE':
         return 'bg-green-100 text-green-700';
 
-      case 'cancelled':
+      case 'CANCEL':
         return 'bg-red-100 text-red-700';
 
       default:
@@ -152,17 +184,20 @@ export default function BookingManagementPage() {
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case 'pending':
-        return t('common.status.pending');
+      case 'PENDING':
+        return 'Chờ xác nhận';
 
-      case 'confirmed':
-        return t('common.status.confirmed');
+      case 'CONFIRMED':
+        return 'Đã xác nhận';
 
-      case 'completed':
-        return t('common.status.completed');
+      case 'IN_PROGRESS':
+        return 'Đang thực hiện';
 
-      case 'cancelled':
-        return t('common.status.cancelled');
+      case 'DONE':
+        return 'Hoàn thành';
+
+      case 'CANCEL':
+        return 'Đã hủy';
 
       default:
         return status;
@@ -199,15 +234,142 @@ export default function BookingManagementPage() {
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
           {/* Search */}
           <div className="bg-white border rounded-xl p-5 mb-6">
-            <div className="relative max-w-md">
-            
-              <input
-                type="text"
-                placeholder={t('dashboard.adminBooking.searchPlaceholder')}
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-              />
+            <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
+
+              <div className="relative max-w-md w-full">
+                <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
+
+                <input
+                  type="text"
+                  placeholder={t('dashboard.adminBooking.searchPlaceholder')}
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                />
+              </div>
+
+              <Popover open={fromOpen} onOpenChange={setFromOpen}>
+                <PopoverTrigger asChild>
+                  <button
+                    className={`
+                      flex items-center gap-2
+                      px-4 py-2
+                      rounded-lg
+                      min-w-[180px]
+                      transition-all
+                      bg-white border border-b
+
+                      hover:border-orange-500
+                      ${
+                        fromOpen
+                          ? "bg-orange-500 text-white border-orange-500"
+                          : ""
+                      }
+                    `}
+                  >
+                    <CalendarDays 
+                        className={`w-4 h-4 ${
+                        fromOpen ? "text-white" : "text-orange-500"
+                      }`}
+                    />
+
+                    {fromDate
+                      ? fromDate.toLocaleDateString("vi-VN")
+                      : "Từ ngày"}
+                  </button>
+                </PopoverTrigger>
+
+                <PopoverContent className="w-auto p-0  bg-orange-100">
+                  <Calendar
+                    mode="single"
+                    selected={fromDate}
+                    onSelect={setFromDate}
+                    classNames={{
+                      day:
+                        "h-9 w-9 rounded-md border border-transparent hover:border-orange-500 [&[data-selected]]:!bg-orange-500 [&[data-selected]]:!text-white",
+                      day_selected:
+                        "!bg-orange-500 !text-white hover:!bg-orange-500 hover:!text-white",
+                      day_today:
+                        "border border-orange-300 text-orange-600",
+
+                      caption_label:
+                        "text-orange-500 font-semibold",
+
+                      nav_button:
+                        "text-orange-500 hover:bg-orange-100",
+                    }}
+                  />
+                </PopoverContent>
+              </Popover>
+
+              <Popover open={toOpen} onOpenChange={setToOpen} >
+                <PopoverTrigger asChild>
+                  <button
+                    className={`
+                      flex items-center gap-2
+                      px-4 py-2
+                      rounded-lg
+                      min-w-[180px]
+                      transition-all
+                      bg-white border border-b
+
+                      hover:border-orange-500
+                     ${
+                        toOpen
+                          ? "bg-orange-500 text-white border-orange-500"
+                          : ""
+                      }
+                    `}
+                  >
+                    <CalendarDays 
+                     className={`w-4 h-4 ${
+                        toOpen  ? "text-white" : "text-orange-500"
+                      }`}
+                    />
+
+                    {toDate
+                      ? toDate.toLocaleDateString("vi-VN")
+                      : "Đến ngày"}
+                  </button>
+                </PopoverTrigger>
+
+                <PopoverContent className="w-auto p-0 bg-orange-100">
+                  <Calendar
+                    mode="single"
+                    selected={toDate}
+                    onSelect={setToDate}
+                   classNames={{
+                      day:
+                        "h-9 w-9 rounded-md border border-transparent hover:border-orange-500 [&[data-selected]]:!bg-orange-500 [&[data-selected]]:!text-white",
+                      day_selected:
+                        "!bg-orange-500 !text-white hover:!bg-orange-500 hover:!text-white",
+                      day_today:
+                        "border border-orange-300 text-orange-600",
+
+                      caption_label:
+                        "text-orange-500 font-semibold",
+
+                      nav_button:
+                        "text-orange-500 hover:bg-orange-100",
+                    }}
+                  />
+                </PopoverContent>
+              </Popover>
+
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="px-4 py-2 pr-10
+                     border border-black-300 rounded-lg hover:border-orange-300 focus:bg-orange-100"
+              >
+                <option value="ALL">Tất cả trạng thái</option>
+                <option value="PENDING">Chờ xác nhận</option>
+                <option value="CONFIRMED">Đã xác nhận</option>
+                <option value="IN_PROGRESS">Đang thực hiện</option>
+                <option value="DONE">Hoàn thành</option>
+                <option value="CANCEL">Đã hủy</option>
+              </select>
+
             </div>
           </div>
 
@@ -225,7 +387,7 @@ export default function BookingManagementPage() {
                     <th className="px-5 py-4 text-left">
                       <button
                         onClick={() =>
-                          handleSort('customerName')
+                          handleSort('tenKH')
                         }
                         className="flex items-center gap-1 font-semibold hover:text-orange-600"
                       >
@@ -238,7 +400,7 @@ export default function BookingManagementPage() {
                     <th className="px-5 py-4 text-left">
                       <button
                         onClick={() =>
-                          handleSort('petName')
+                          handleSort('tenPet')
                         }
                         className="flex items-center gap-1 font-semibold hover:text-orange-600"
                       >
@@ -256,7 +418,7 @@ export default function BookingManagementPage() {
                     <th className="px-5 py-4 text-left">
                       <button
                         onClick={() =>
-                          handleSort('staffName')
+                          handleSort('tenNV')
                         }
                         className="flex items-center gap-1 font-semibold hover:text-orange-600"
                       >
@@ -269,7 +431,7 @@ export default function BookingManagementPage() {
                     <th className="px-5 py-4 text-left">
                       <button
                         onClick={() =>
-                          handleSort('bookingTime')
+                          handleSort('thoiGian')
                         }
                         className="flex items-center gap-1 font-semibold hover:text-orange-600"
                       >
@@ -289,7 +451,7 @@ export default function BookingManagementPage() {
                   {filteredBookings.length > 0 ? (
                     filteredBookings.map((booking, index) => (
                       <tr
-                        key={booking.id}
+                        key={booking.maLich}
                         className="border-t hover:bg-gray-50 transition"
                       >
                         <td className="px-5 py-4 font-medium">
@@ -297,35 +459,35 @@ export default function BookingManagementPage() {
                         </td>
 
                         <td className="px-5 py-4">
-                          {booking.customerName}
+                          {booking.tenKH}
                         </td>
 
                         <td className="px-5 py-4">
-                          {booking.petName}
+                          {booking.tenPet}
                         </td>
 
                         <td className="px-5 py-4">
-                          {booking.serviceName}
+                          {booking.tenDV}
                         </td>
 
                         <td className="px-5 py-4">
-                          {booking.staffName}
+                          {booking.tenNV}
                         </td>
 
                         <td className="px-5 py-4">
                           {formatDateTime(
-                            booking.bookingTime
+                            booking.thoiGian
                           )}
                         </td>
 
                         <td className="px-5 py-4 text-center">
                           <span
                             className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusStyle(
-                              booking.status
+                              booking.trangThai
                             )}`}
                           >
                             {getStatusText(
-                              booking.status
+                              booking.trangThai
                             )}
                           </span>
                         </td>

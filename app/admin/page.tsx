@@ -8,15 +8,119 @@ import { Button } from '@/components/ui/button';
 import { getCurrentUser } from '@/lib/auth';
 import { User } from '@/lib/mock-data';
 import { BarChart3, Users, ShoppingBag, Calendar } from 'lucide-react';
-import { getOrders, getServiceBookings, getAllUsers, getProducts, getServices } from '@/lib/storage';
-import { getAllUsers as getAllUsersAuth } from '@/lib/auth';
+import { getOrders, getServiceBookings, getProducts, getServices } from '@/lib/storage';
 import { useTranslation } from 'react-i18next';
+import { userService } from '@/services/userService';
+import { donHangService } from '@/services/donHangService';
+import { lichHenService } from '@/services/lichHenService';
+import { sanPhamService } from '@/services/sanPhamService';
 
 export default function AdminDashboard() {
   const { t } = useTranslation();
   const router = useRouter();
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+
+  const [userSummary, setUserSummary] = useState({
+    tongSoUser: 0,
+    soUserActive: 0,
+    soUserInactive: 0,
+    soNhanVien: 0,
+    soKhachHang: 0,
+    soAdmin: 0,
+    soStaff: 0,
+    soKTV: 0,
+    soCustomer: 0,
+  });
+
+  const [orderSummary, setOrderSummary] = useState({
+  tongSoDonHang: 0,
+  soPending: 0,
+  soDone: 0,
+  soCancel: 0,
+  soConfirmed: 0,
+  soInProgress: 0,
+  doanhThuThang: 0,
+  tongDoanhThu: 0,
+});
+
+const [bookingSummary, setBookingSummary] = useState({
+  tongSoLichHen: 0,
+  soPending: 0,
+  soConfirmed: 0,
+  soInProgress: 0,
+  soDone: 0,
+  soCancel: 0,
+});
+
+const [tongDoanhThuDichVu, setTongDoanhThuDichVu] = useState(0);
+
+  const loadUserSummary = async () => {
+    try {
+      const res = await userService.getUserSummary();
+
+      if (res.data?.data) {
+        setUserSummary(res.data.data);
+      }
+    } catch (error) {
+      console.error('Lỗi lấy thống kê user:', error);
+    }
+  };
+
+  const loadOrderSummary = async () => {
+  try {
+    const res = await donHangService.getDonHangSummary();
+
+    if (res.data?.data) {
+      setOrderSummary(res.data.data);
+    }
+  } catch (error) {
+    console.error('Lỗi lấy thống kê đơn hàng:', error);
+  }
+};
+
+const loadBookingSummary = async () => {
+  try {
+    const res = await lichHenService.getSummary();
+
+    if (res.data?.data) {
+      setBookingSummary(res.data.data);
+    }
+  } catch (error) {
+    console.error('Lỗi lấy thống kê lịch hẹn:', error);
+  }
+};
+
+const loadTongDoanhThuDichVu = async () => {
+  try {
+    const res = await lichHenService.getTongDoanhThu();
+
+    if (res.data?.data != null) {
+      setTongDoanhThuDichVu(res.data.data);
+    }
+  } catch (error) {
+    console.error('Lỗi lấy doanh thu dịch vụ:', error);
+  }
+};
+
+const [productSummary, setProductSummary] = useState({
+  tongSoSanPham: 0,
+  soHetHang: 0,
+  soSapHetHang: 0,
+  tongGiaTriKho: 0,
+});
+
+const loadProductSummary = async () => {
+  try {
+    const res = await sanPhamService.getSanPhamSummary();
+
+    if (res.data?.data) {
+      setProductSummary(res.data.data);
+    }
+  } catch (error) {
+    console.error('Lỗi lấy thống kê sản phẩm:', error);
+  }
+};
 
   useEffect(() => {
     const user = getCurrentUser();
@@ -26,6 +130,11 @@ export default function AdminDashboard() {
     }
 
     setCurrentUser(user);
+    loadUserSummary();
+    loadOrderSummary();
+     loadBookingSummary();
+     loadTongDoanhThuDichVu();
+      loadProductSummary();
     setLoading(false);
   }, [router]);
 
@@ -35,41 +144,42 @@ export default function AdminDashboard() {
 
   const orders = getOrders();
   const bookings = getServiceBookings();
-  const users = getAllUsersAuth();
   const products = getProducts();
   const services = getServices();
 
   const stats = [
     {
       icon: '👥',
+      route: '/admin/user',
       label: t('dashboard.admin.totalUsers'),
-      value: users.length,
+      value:  userSummary.tongSoUser,
       color: 'bg-blue-100 text-blue-600',
     },
     {
       icon: '🛍️',
+      route: '/admin/donhang',
       label: t('dashboard.admin.totalOrders'),
-      value: orders.length,
+      value: orderSummary.tongSoDonHang,
       color: 'bg-green-100 text-green-600',
     },
     {
       icon: '📅',
       label: t('dashboard.admin.totalBookings'),
       route: '/admin/booking',
-      value: bookings.length,
+      value: bookingSummary.tongSoLichHen,
       color: 'bg-orange-100 text-orange-600',
     },
     {
       icon: '📦',
       label: t('dashboard.admin.products'),
-      value: products.length,
+      value: productSummary.tongSoSanPham,
       color: 'bg-purple-100 text-purple-600',
     },
   ];
 
-  const totalRevenue = orders.reduce((sum, order) => sum + order.totalPrice, 0);
-  const servicesRevenue = bookings.reduce((sum, booking) => sum + booking.price, 0);
-
+  const totalRevenue = orderSummary.tongDoanhThu;
+  const servicesRevenue = tongDoanhThuDichVu;
+  const pendingOrders = orderSummary.soPending + orderSummary.soConfirmed + orderSummary.soInProgress;
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <Header />
@@ -120,7 +230,7 @@ export default function AdminDashboard() {
                 <h2 className="text-xl font-bold text-gray-900">{t('dashboard.admin.salesRevenue')}</h2>
               </div>
               <p className="text-3xl font-bold text-orange-600">
-                {(totalRevenue / 1000).toFixed(0)}K
+                {totalRevenue.toLocaleString('vi-VN')}VNĐ
               </p>
               <p className="text-sm text-gray-600 mt-2">{t('dashboard.fromOrders', { count: orders.length })}</p>
             </div>
@@ -131,7 +241,7 @@ export default function AdminDashboard() {
                 <h2 className="text-xl font-bold text-gray-900">{t('dashboard.admin.serviceRevenue')}</h2>
               </div>
               <p className="text-3xl font-bold text-orange-600">
-                {(servicesRevenue / 1000).toFixed(0)}K
+                {servicesRevenue.toLocaleString('vi-VN')}VNĐ
               </p>
               <p className="text-sm text-gray-600 mt-2">{t('dashboard.fromServices', { count: bookings.length })}</p>
             </div>
@@ -149,23 +259,23 @@ export default function AdminDashboard() {
               <div className="space-y-2 mb-6">
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-gray-600">Admin</span>
-                  <span className="font-semibold">{users.filter(u => u.role === 'admin').length}</span>
+                  <span className="font-semibold">{userSummary.soAdmin}</span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-gray-600">{t('dashboard.admin.staff')}</span>
-                  <span className="font-semibold">{users.filter(u => u.role === 'staff').length}</span>
+                  <span className="font-semibold">{userSummary.soStaff}</span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-gray-600">KTV</span>
-                  <span className="font-semibold">{users.filter(u => u.role === 'ktv').length}</span>
+                  <span className="font-semibold">{userSummary.soKTV}</span>
                 </div>
                 <div className="flex items-center justify-between text-sm border-t pt-2 mt-2">
                   <span className="text-gray-600">{t('dashboard.admin.customers')}</span>
-                  <span className="font-semibold">{users.filter(u => u.role === 'customer').length}</span>
+                  <span className="font-semibold">{userSummary.soCustomer}</span>
                 </div>
               </div>
 
-              <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
+              <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white"  onClick={() => router.push('/admin/user')}>
                 {t('dashboard.admin.userManagement')}
               </Button>
             </div>
@@ -227,17 +337,17 @@ export default function AdminDashboard() {
             {[
               {
                 title: t('dashboard.admin.pendingOrders'),
-                value: orders.filter(o => o.status === 'pending').length,
+                value: pendingOrders,
                 color: 'text-yellow-600',
               },
               {
                 title: t('dashboard.admin.pendingServices'),
-                value: bookings.filter(b => b.status === 'pending').length,
+                value: bookingSummary.soPending,
                 color: 'text-blue-600',
               },
               {
                 title: t('dashboard.admin.outOfStock'),
-                value: products.filter(p => p.stock === 0).length,
+                 value: productSummary.soHetHang,
                 color: 'text-red-600',
               },
             ].map((item, index) => (
