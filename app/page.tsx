@@ -117,7 +117,20 @@ export default function Home() {
               {products.map((product) => (
                 <Link key={product.maSP} href={`/products/${product.maSP}`}>
                   <div className="bg-white border rounded-lg overflow-hidden hover:shadow-lg transition cursor-pointer h-full">
-                    <div className="bg-gray-200 h-48 flex items-center justify-center text-gray-400">📦</div>
+                    <div className="bg-gray-200 h-48 flex items-center justify-center text-gray-400 text-4xl select-none">
+                      {product.urlImg ? (
+                        <img
+                          src={product.urlImg || '/default-product.png'}
+                          onError={(e) => {
+                            e.currentTarget.src = '/default-product.png';
+                          }}
+                          alt={product.tenSP}
+                          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                        />
+                      ) : (
+                        <span className="text-gray-400 text-4xl">📦</span>
+                      )}
+                    </div>
                     <div className="p-4">
                       <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2">{product.tenSP}</h3>
                       <p className="text-sm text-gray-600 mb-3 line-clamp-2">{product.moTa || t('common.fallbacks.qualityProduct')}</p>
@@ -146,7 +159,20 @@ export default function Home() {
             <div className="grid md:grid-cols-3 gap-8">
               {services.map((service) => (
                 <div key={service.maDV} className="bg-white p-6 rounded-lg shadow-sm hover:shadow-lg transition">
-                  <div className="w-16 h-16 bg-orange-100 rounded-lg flex items-center justify-center mb-4 text-2xl">✂️</div>
+                  <div className="bg-gray-200 h-48 rounded-lg overflow-hidden mb-4 flex items-center justify-center text-gray-400 text-4xl">
+                    {service.urlImg ? (
+                      <img
+                        src={service.urlImg || '/default-service.png'}
+                        onError={(e) => {
+                          e.currentTarget.src = '/default-service.png';
+                        }}
+                        alt={service.tenDV}
+                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                      />
+                    ) : (
+                      <span>✂️</span>
+                    )}
+                  </div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">{service.tenDV}</h3>
                   <p className="text-gray-600 text-sm mb-4 line-clamp-3">{service.moTa}</p>
                   <div className="flex items-center justify-between mb-4">

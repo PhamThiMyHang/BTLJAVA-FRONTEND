@@ -14,12 +14,14 @@ import { userService } from '@/services/userService';
 import { donHangService } from '@/services/donHangService';
 import { lichHenService } from '@/services/lichHenService';
 import { sanPhamService } from '@/services/sanPhamService';
+import { viTriSanPhamService } from '@/services/viTriSanPhamService';
 
 export default function AdminDashboard() {
   const { t } = useTranslation();
   const router = useRouter();
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [viTriStats, setViTriStats] = useState([]);
 
   const [userSummary, setUserSummary] = useState({
     tongSoUser: 0,
@@ -103,6 +105,32 @@ const loadTongDoanhThuDichVu = async () => {
   }
 };
 
+const loadViTriStats = async () => {
+  try {
+    // lấy danh sách kệ
+    const res = await viTriSanPhamService.getAllViTri();
+
+    const viTriList = res.data || [];
+
+    // lấy số lượng từng kệ
+    const data = await Promise.all(
+      viTriList.map(async (item : any) => {
+        const countRes = await sanPhamService.countByViTri(item.maViTri);
+
+        return {
+          maViTri: item.maViTri,
+          viTri: item.viTri,
+          count: countRes.data.data,
+        };
+      })
+    );
+
+    setViTriStats(data);
+  } catch (err) {
+    console.error("Lỗi lấy thống kê kệ:", err);
+  }
+};
+
 const [productSummary, setProductSummary] = useState({
   tongSoSanPham: 0,
   soHetHang: 0,
@@ -135,6 +163,7 @@ const loadProductSummary = async () => {
      loadBookingSummary();
      loadTongDoanhThuDichVu();
       loadProductSummary();
+      loadViTriStats();
     setLoading(false);
   }, [router]);
 
@@ -144,7 +173,6 @@ const loadProductSummary = async () => {
 
   const orders = getOrders();
   const bookings = getServiceBookings();
-  const products = getProducts();
   const services = getServices();
 
   const stats = [
@@ -288,15 +316,22 @@ const loadProductSummary = async () => {
               </div>
 
               <div className="space-y-2 mb-6">
-                {[...new Set(products.map(p => p.category))].map((category) => {
-                  const count = products.filter(p => p.category === category).length;
-                  return (
-                    <div key={category} className="flex items-center justify-between text-sm">
-                      <span className="text-gray-600">{category}</span>
-                      <span className="font-semibold">{count}</span>
+                <div className="space-y-2 mb-6">
+                  {viTriStats.map((item : any) => (
+                    <div
+                      key={item.maViTri}
+                      className="flex items-center justify-between text-sm"
+                    >
+                      <span className="text-gray-600">
+                        {item.viTri}
+                      </span>
+
+                      <span className="font-semibold">
+                        {item.count}
+                      </span>
                     </div>
-                  );
-                })}
+                  ))}
+                </div>
               </div>
 
               <Button className="w-full bg-green-600 hover:bg-green-700 text-white">

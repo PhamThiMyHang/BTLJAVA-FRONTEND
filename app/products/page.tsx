@@ -34,11 +34,14 @@ export default function ProductsPage() {
             name: item.tenSP,
             price: item.gia,
             quantity: item.soLuong,
-            shelf: item.viTri || t('products.defaultShelf'),
-            urlImg: item.urlImg, // Đảm bảo field này được lấy từ backend
+
+            maViTri: item.viTri,
+            tenViTri: item.tenViTri,
+
+            urlImg: item.urlImg,
             rating: 4.5
           }));
-
+          console.log(mapped);
           setProducts(mapped);
           setFilteredProducts(mapped);
         }
@@ -47,14 +50,27 @@ export default function ProductsPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  const categories = [...new Set(products.map((p: any) => p.shelf))];
+  const categories = [
+  ...new Map(
+    products.map((p: any) => [
+      p.maViTri,
+      {
+        maViTri: p.maViTri,
+        tenViTri: p.tenViTri
+      }
+    ])
+  ).values()
+];
+
 
   // Lọc theo danh mục + tìm kiếm
   useEffect(() => {
     let result = products;
 
     if (selectedCategory) {
-      result = result.filter((p: any) => p.shelf === selectedCategory);
+      result = result.filter(
+        (p: any) => p.maViTri === selectedCategory
+      );
     }
 
     if (searchTerm.trim() !== "") {
@@ -139,17 +155,17 @@ export default function ProductsPage() {
                   >
                     {t('products.all')}
                   </button>
-                  {categories.map((category) => (
+                  {categories.map((category: any) => (
                     <button
-                      key={category}
-                      onClick={() => setSelectedCategory(category)}
+                      key={category.maViTri}
+                      onClick={() => setSelectedCategory(category.maViTri)}
                       className={`block w-full text-left px-3 py-2 rounded-lg transition text-sm ${
-                        selectedCategory === category
+                        selectedCategory === category.maViTri
                           ? 'bg-orange-600 text-white font-medium'
                           : 'text-gray-700 hover:bg-gray-200'
                       }`}
                     >
-                      {category}
+                      {category.tenViTri}
                     </button>
                   ))}
                 </div>
@@ -189,6 +205,9 @@ export default function ProductsPage() {
                             <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-orange-600 transition">
                               {product.name}
                             </h3>
+                            <p className="text-xs text-orange-600 mb-2">
+                              {product.tenViTri}
+                            </p>
                             <p className="text-sm text-gray-600 mb-3 flex-1">
                               {t('products.stock', { count: product.quantity })}
                             </p>
