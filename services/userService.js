@@ -10,6 +10,44 @@ export const userService = {
     getUserSummary: () => apiClient.get('/api/users/summary'),
     searchUsers: (params) => apiClient.get('/api/users/search', { params }),
 
+     // =========================
+    // LIÊN KẾT USER
+    // =========================
+    linkNhanVien: (userID, maNV) =>
+        apiClient.post(`/api/users/${userID}/link-nhanvien/${maNV}`),
+
+    linkKhachHang: (userID, maKH) =>
+        apiClient.post(`/api/users/${userID}/link-khachhang/${maKH}`),
+
+    // =========================
+    // ROLE CỦA USER
+    // =========================
+    getUsersByRole: (roleName) =>
+        apiClient.get(`/api/users/role/${roleName}`),
+
+    changeRole: (id, roleName) =>
+        apiClient.put(`/api/users/${id}/change-role`, {
+            roleName
+        }),
+
+
+    // =========================
+    // USERNAME
+    // =========================
+    changeUsername: (id, username) =>
+        apiClient.put(`/api/users/${id}/change-username`, {
+            username
+        }),
+
+
+    // =========================
+    // STATUS
+    // =========================
+    toggleStatus: (id) =>
+        apiClient.put(`/api/users/${id}/toggle-status`),
+
+
+     
     // --- ROLE CONTROLLER ---
     getAllRoles: (params) => apiClient.get('/api/roles', { params }),
     getRoleById: (id) => apiClient.get(`/api/roles/${id}`),

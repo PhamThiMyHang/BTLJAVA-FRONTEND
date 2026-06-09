@@ -49,30 +49,50 @@ export const lichHenService = {
         return { ...res, data: [] };
     },
 
-    /**
-     * Cập nhật trạng thái lịch hẹn (dùng cho CONFIRMED, IN_PROGRESS, DONE).
-     * KHÔNG dùng để hủy — dùng cancelLichHen() thay thế.
-     * @param {string} trangThaiMoi - 'CONFIRMED' | 'IN_PROGRESS' | 'DONE'
-     */
-    updateTrangThai: async (maLich, trangThaiMoi) => {
-        const res = await apiClient.get(`/api/lich-hen/${maLich}`);
-        let current = res.data;
-        if (current && current.data && !Array.isArray(current.data) && current.data.maKH) {
-            current = current.data;
-        }
-        if (!current || !current.maKH) {
-            throw new Error('Không lấy được thông tin lịch hẹn (maLich=' + maLich + ')');
-        }
-        const payload = {
-            maKH:      current.maKH,
-            maPet:     current.maPet  || '',
-            maNV:      current.maNV   || '',
-            maDV:      current.maDV,
-            thoiGian:  current.thoiGian,
-            trangThai: trangThaiMoi,
-        };
-        return apiClient.put(`/api/lich-hen/${maLich}`, payload);
-    },
+/**
+ * Cập nhật trạng thái lịch hẹn (dùng cho CONFIRMED, IN_PROGRESS, DONE).
+ * KHÔNG dùng để hủy — dùng cancelLichHen() thay thế.
+ * @param {string} trangThaiMoi - 'CONFIRMED' | 'IN_PROGRESS' | 'DONE'
+ */
+updateTrangThai: async (maLich, trangThaiMoi) => {
+    const res = await apiClient.get(`/api/lich-hen/${maLich}`);
+    let current = res.data;
+    if (current && current.data && !Array.isArray(current.data) && current.data.maKH) {
+        current = current.data;
+    }
+    if (!current || !current.maKH) {
+        throw new Error('Không lấy được thông tin lịch hẹn (maLich=' + maLich + ')');
+    }
+    const payload = {
+        maKH: current.maKH,
+        maPet: current.maPet || '',
+        maNV: current.maNV || '',
+        maDV: current.maDV,
+        thoiGian: current.thoiGian,
+        trangThai: trangThaiMoi,
+    };
+    return apiClient.put(`/api/lich-hen/${maLich}`, payload);
+},
+
+// Tổng doanh thu toàn cửa hàng
+getTongDoanhThu: () =>
+    apiClient.get('/api/lich-hen/tong-doanh-thu'),
+
+// Doanh thu tất cả nhân viên
+getDoanhThuNhanVien: () =>
+    apiClient.get('/api/lich-hen/doanh-thu-nhan-vien'),
+
+// Doanh thu 1 nhân viên theo mã nhân viên
+getDoanhThuNhanVienByMaNV: (maNV) =>
+    apiClient.get(`/api/lich-hen/doanh-thu-nhan-vien/${maNV}`),
+
+// =========================
+// THỐNG KÊ LỊCH HẸN
+// =========================
+
+// Tổng số lịch hẹn, số pending, confirmed,...
+getSummary: () =>
+    apiClient.get('/api/lich-hen/summary'),
 
     /**
      * Hủy/xóa lịch hẹn.
