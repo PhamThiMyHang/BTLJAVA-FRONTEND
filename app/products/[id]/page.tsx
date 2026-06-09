@@ -339,7 +339,7 @@ const handleToggleLike = async () => {
                         </h3>
                         <div className="flex items-center justify-between mb-4">
                           <span className="text-lg font-bold text-orange-600">
-                            {rel.price}K
+                            {rel.price} VNĐ
                           </span>
                           <div className="flex items-center gap-1">
                             <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />

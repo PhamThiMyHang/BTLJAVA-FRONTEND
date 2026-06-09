@@ -217,7 +217,7 @@ export default function ProductsPage() {
                         <div className="p-4 pt-0">
                           <div className="flex items-center justify-between mb-4">
                             <span className="text-xl font-bold text-orange-600">
-                              {product.price}K
+                              {product.price} VNĐ
                             </span>
                             <div className="flex items-center gap-1">
                               <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />

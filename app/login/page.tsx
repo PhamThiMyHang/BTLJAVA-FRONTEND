@@ -51,10 +51,10 @@ export default function LoginPage() {
 
   // Demo credentials
   const demoAccounts = [
-    { email: 'admin@petshop.com', password: 'admin123', role: 'Admin' },
-    { email: 'staff@petshop.com', password: 'staff123', role: 'Staff' },
-    { email: 'ktv@petshop.com', password: 'ktv123', role: 'KTV' },
-    { email: 'customer@example.com', password: 'customer123', role: 'Customer' },
+    { email: 'admin@gmail.com', password: 'admin123', role: 'Admin' },
+    { email: 'nguyenvanan@gmail.com', password: '2a101234567890abcdef12345678', role: 'Staff' },
+    { email: 'tranthibich@gmail.com.com', password: '2a101234567890abcdef12345678', role: 'KTV' },
+    { email: 'phamminhquan@gmail.com', password: '2a101234567890abcdef12345678', role: 'Customer' },
   ];
 
   return (
