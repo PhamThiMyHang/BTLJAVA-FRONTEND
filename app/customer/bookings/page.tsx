@@ -28,7 +28,7 @@ export default function BookingsPage() {
     }
 
     setCurrentUser(user);
-    setBookings(getBookingsByCustomer(user.id));
+    setBookings(getBookingsByCustomer(String(user.id)));
     setLoading(false);
   }, [router]);
 

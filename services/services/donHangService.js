@@ -2,7 +2,7 @@
 import { apiClient } from './apiClient';
 
 export const donHangService = {
-  // POST /api/don-hang - Tạo mới đơn hàng (chỉ header, không gửi chiTiet vào đây)
+  // POST /api/don-hang - Tạo mới đơn hàng
   createDonHang: (data) => apiClient.post('/api/don-hang', data),
 
   // GET /api/don-hang - Lấy tất cả đơn hàng
@@ -23,12 +23,6 @@ export const donHangService = {
   // GET /api/don-hang/search - Tìm kiếm đơn hàng
   searchDonHang: (params) => apiClient.get('/api/don-hang/search', { params }),
 
-  // GET /api/don-hang/user/{maUser} - Lấy đơn hàng theo user
+  // GET /api/don-hang/user/{maUser} - Lấy đơn hàng theo user (thêm mới)
   getDonHangByUser: (maUser) => apiClient.get(`/api/don-hang/user/${maUser}`),
-
-  /**
-   * Thêm từng chi tiết đơn hàng qua endpoint riêng.
-   * ChiTietDonHangRequest: { maDH, maSP, soLuong, donGia }
-   */
-  addChiTiet: (chiTiet) => apiClient.post('/api/v1/chi-tiet-don-hang', chiTiet),
 };

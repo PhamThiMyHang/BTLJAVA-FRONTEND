@@ -12,6 +12,12 @@ import { gioHangService } from '@/services/gioHangService'; // Import gioHangSer
 import { isAuthenticated, getCurrentUser } from '@/lib/auth'; // Import getCurrentUser
 import { useTranslation } from 'react-i18next';
 
+// Hiển thị giá dạng K (backend trả đơn vị K, ví dụ 200 → "200K")
+const fmtK = (gia: number): string => {
+  if (!gia || gia === 0) return '0K';
+  return `${Number(gia).toLocaleString('vi-VN')}K`;
+};
+
 export default function ProductsPage() {
   const { t } = useTranslation();
   const router = useRouter();
@@ -198,7 +204,7 @@ export default function ProductsPage() {
                         <div className="p-4 pt-0">
                           <div className="flex items-center justify-between mb-4">
                             <span className="text-xl font-bold text-orange-600">
-                              {product.price}K
+                              {fmtK(product.price)}
                             </span>
                             <div className="flex items-center gap-1">
                               <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />

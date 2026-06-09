@@ -16,8 +16,9 @@ import { ServiceImage } from '@/components/ServiceImage';
 
 const formatPrice = (gia: number | string, locale: string): string => {
   const num = Number(gia || 0);
-  if (num === 0) return '0đ';
-  return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(num);
+  if (num === 0) return 'Liên hệ';
+  // Backend trả đơn vị K (ví dụ: 200 = 200K)
+  return `${num.toLocaleString('vi-VN')}K`;
 };
 
 const TIME_SLOTS = [
@@ -156,7 +157,8 @@ export default function ServiceDetailPage() {
         maNV: selectedNV,
         maDV: service.maDV,
         thoiGian,
-        trangThai: 'CHO_XAC_NHAN',
+        // PENDING: lịch vừa đặt, chờ khách thanh toán trong 24h
+        trangThai: 'PENDING',
       };
 
       const res = await lichHenService.createLichHen(payload);
@@ -335,14 +337,15 @@ export default function ServiceDetailPage() {
                       </div>
                       <div className="flex justify-between">
                         <span className="text-gray-500">Trạng thái</span>
-                        <span className="text-yellow-600 font-semibold">Chờ xác nhận</span>
+                        <span className="text-orange-600 font-semibold">Chờ thanh toán</span>
                       </div>
                     </div>
-                    <p className="text-xs text-gray-400 mb-6">
-                      Nhân viên sẽ liên hệ xác nhận lịch hẹn trong vòng 30 phút.
-                    </p>
+                    <div className="bg-red-50 border border-red-200 rounded-xl px-4 py-3 mb-3">
+                      <p className="text-xs text-red-700 font-bold mb-1">⏰ Thanh toán trong vòng 24 giờ</p>
+                      <p className="text-xs text-red-600">Nếu quá hạn, lịch hẹn sẽ tự động bị hủy. Vui lòng vào giỏ hàng để thanh toán ngay.</p>
+                    </div>
                     <p className="text-xs text-blue-600 bg-blue-50 border border-blue-200 rounded-xl px-3 py-2 mb-2">
-                      🛒 Lịch hẹn đã được thêm vào giỏ hàng. Bạn có thể thanh toán tại giỏ hàng.
+                      🛒 Lịch hẹn đã được thêm vào giỏ hàng. Vào giỏ hàng để thanh toán ngay.
                     </p>
                     <div className="flex gap-3">
                       <Button variant="outline" onClick={handleCloseModal} className="flex-1">

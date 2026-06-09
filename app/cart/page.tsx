@@ -161,13 +161,15 @@ export default function CartPage() {
         rawItems = rawItems.data;
       }
       if (!Array.isArray(rawItems)) rawItems = [];
-      // Chuẩn hóa giá: đảm bảo donGia và thanhTien luôn là số
-      const products: GioHangDTO[] = rawItems.map((item: any) => ({
-        ...item,
-        donGia: Number(item.donGia ?? item.gia ?? item.giaSP ?? 0),
-        thanhTien: Number(item.thanhTien ?? item.tongTien ?? ((item.soLuong || 1) * Number(item.donGia ?? item.gia ?? 0))),
-        soLuong: Number(item.soLuong ?? 1),
-      }));
+      // Backend trả đơn vị K → nhân 1000 để fmtVND hiển thị đúng (200K → 200.000 ₫)
+      const products: GioHangDTO[] = rawItems.map((item: any) => {
+        const donGiaK = Number(item.donGia ?? item.gia ?? item.giaSP ?? 0);
+        const donGia = donGiaK * 1000;
+        const soLuong = Number(item.soLuong ?? 1);
+        const rawThanhTien = Number(item.thanhTien ?? item.tongTien ?? 0);
+        const thanhTien = rawThanhTien > 0 ? rawThanhTien * 1000 : donGia * soLuong;
+        return { ...item, donGia, thanhTien, soLuong };
+      });
 
       // Tính tổng tiền sản phẩm
       let cartTotal = 0;
@@ -204,19 +206,23 @@ export default function CartPage() {
       }));
 
       // Chỉ hiển thị dịch vụ chưa hoàn thành / chưa hủy để thanh toán
-      const serviceItems: CartItem[] = services.map((l) => ({
-        id: l.maLich,
-        type: 'service',
-        name: l.tenDV || `Dịch vụ ${l.maDV}`,
-        price: Number(l.giaDV ?? l.gia ?? l.giaDichVu ?? 0),
-        total: Number(l.giaDV ?? l.gia ?? l.giaDichVu ?? 0),
-        status: l.trangThai,
-        scheduledAt: l.thoiGian,
-        staffName: l.tenNV,
-        raw: l,
-        // Chỉ pre-select dịch vụ chờ xác nhận (chưa trả tiền)
-        selected: l.trangThai === 'CHO_XAC_NHAN',
-      }));
+      const serviceItems: CartItem[] = services.map((l) => {
+        const giaK = Number(l.giaDV ?? l.gia ?? l.giaDichVu ?? 0);
+        const giaVND = giaK * 1000; // Backend trả K → nhân 1000
+        return {
+          id: l.maLich,
+          type: 'service',
+          name: l.tenDV || `Dịch vụ ${l.maDV}`,
+          price: giaVND,
+          total: giaVND,
+          status: l.trangThai,
+          scheduledAt: l.thoiGian,
+          staffName: l.tenNV,
+          raw: l,
+          // Chỉ pre-select dịch vụ chờ xác nhận (chưa trả tiền)
+          selected: l.trangThai === 'CHO_XAC_NHAN',
+        };
+      });
 
       setCartItems([...productItems, ...serviceItems]);
     } catch (e) {

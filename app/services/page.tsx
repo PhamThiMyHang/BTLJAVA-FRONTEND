@@ -14,7 +14,8 @@ import { ServiceImage } from '@/components/ServiceImage';
 const formatPrice = (gia: number | string, locale: string): string => {
   const num = Number(gia || 0);
   if (num === 0) return 'Liên hệ';
-  return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(num);
+  // Backend trả đơn vị K (ví dụ: 200 = 200K)
+  return `${num.toLocaleString('vi-VN')}K`;
 };
 
 // Hàm tự động phân loại dịch vụ dựa trên tên
