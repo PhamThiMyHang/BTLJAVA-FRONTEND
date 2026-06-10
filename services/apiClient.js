@@ -26,6 +26,9 @@ apiClient.interceptors.response.use(
         return response;
     },
     (error) => {
+        const status = error.response?.status;
+        const message = error.response?.data?.message || error.message;
+        console.error(`[API Error ${status}]:`, message);
         // Xử lý lỗi hệ thống chung (nếu cần)
         return Promise.reject(error);
     }

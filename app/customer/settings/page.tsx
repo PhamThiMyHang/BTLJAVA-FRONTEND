@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { getCurrentUser, logoutUser } from '@/lib/auth';
 import { User } from '@/lib/mock-data';
 import Link from 'next/link';
-import { LogOut, Lock } from 'lucide-react';
+import { LogOut, Lock, LayoutDashboard } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 export default function SettingsPage() {
@@ -114,7 +114,7 @@ export default function SettingsPage() {
                 <p className="text-gray-600 mt-2">{t('dashboard.settings.subtitle')}</p>
               </div>
               <Link href="/customer">
-                <Button variant="outline">{t('dashboard.back')}</Button>
+                <Button variant="outline" className="flex items-center gap-2"><LayoutDashboard className="w-4 h-4" />Dashboard</Button>
               </Link>
             </div>
           </div>

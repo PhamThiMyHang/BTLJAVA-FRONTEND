@@ -9,7 +9,7 @@ import { getCurrentUser } from '@/lib/auth';
 import { getBookingsByCustomer, getServiceById, getPetById } from '@/lib/storage';
 import { User } from '@/lib/mock-data';
 import Link from 'next/link';
-import { Eye } from 'lucide-react';
+import { Eye, LayoutDashboard } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 export default function BookingsPage() {
@@ -21,7 +21,7 @@ export default function BookingsPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const user = getCurrentUser();
+    const user = getCurrentUser() as any;
     if (!user || user.role !== 'customer') {
       router.push('/login');
       return;
@@ -83,7 +83,7 @@ export default function BookingsPage() {
                 <p className="text-gray-600 mt-2">{t('dashboard.bookings.subtitle')}</p>
               </div>
               <Link href="/customer">
-                <Button variant="outline">{t('dashboard.back')}</Button>
+                <Button variant="outline" className="flex items-center gap-2"><LayoutDashboard className="w-4 h-4" />Dashboard</Button>
               </Link>
             </div>
           </div>

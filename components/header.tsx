@@ -82,6 +82,7 @@ export default function Header() {
       case 'admin': return '/admin';
       case 'staff': return '/staff';
       case 'ktv': return '/ktv';
+      case 'customer': return '/customer';
       default: return null;
     }
   };

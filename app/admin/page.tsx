@@ -199,6 +199,7 @@ const loadProductSummary = async () => {
     },
     {
       icon: '📦',
+      route: '/admin/sanpham',
       label: t('dashboard.admin.products'),
       value: productSummary.tongSoSanPham,
       color: 'bg-purple-100 text-purple-600',
@@ -334,7 +335,7 @@ const loadProductSummary = async () => {
                 </div>
               </div>
 
-              <Button className="w-full bg-green-600 hover:bg-green-700 text-white">
+              <Button className="w-full bg-green-600 hover:bg-green-700 text-white" onClick={() => router.push('/admin/sanpham')}>
                 {t('dashboard.admin.productManagement')}
               </Button>
             </div>

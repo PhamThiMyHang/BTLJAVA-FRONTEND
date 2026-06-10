@@ -90,9 +90,15 @@ export default function ProductsPage() {
       return;
     }
 
+    const user = getCurrentUser() as any;
+
+    if (user?.role?.toLowerCase() === 'admin') {
+      alert(t('products.messages.adminNotAllowed'));
+      return;
+    }
+
     try {
       // Lấy thông tin user đang đăng nhập
-      const user = getCurrentUser() as any;
       if (!user || !user.userID) {
         alert(t('products.messages.missingUser'));
         return;

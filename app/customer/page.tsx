@@ -10,6 +10,7 @@ import { Package, Calendar, Heart, Settings, RefreshCw } from 'lucide-react';
 import { getCurrentUser } from '@/lib/auth';
 import { User } from '@/lib/mock-data';
 import { donHangService } from '@/services/donHangService';
+import { petService } from '@/services/petService';
 import { useTranslation } from 'react-i18next';
 
 interface DonHang {
@@ -74,10 +75,24 @@ export default function CustomerDashboard() {
       const ordersRes = await donHangService.searchDonHangs({
         size: 10,
         sort: 'ngayTao,desc',
-        // Nếu backend hỗ trợ lọc theo khách hàng, bỏ comment dòng dưới:
-        // khachHangId: customerId
       });
       setOrders(ordersRes.data?.content || ordersRes.data || []);
+
+      // Lấy danh sách thú cưng của khách hàng từ API
+      try {
+        const petsRes = await petService.searchPets({ maKH: customerId });
+        const petsData = petsRes.data;
+        if (Array.isArray(petsData)) {
+          setPets(petsData);
+        } else if (petsData?.content) {
+          setPets(petsData.content);
+        } else {
+          setPets([]);
+        }
+      } catch (petErr) {
+        console.error('Lỗi tải thú cưng:', petErr);
+        setPets([]);
+      }
 
     } catch (error) {
       console.error('Lỗi khi tải dashboard khách hàng:', error);
@@ -169,7 +184,7 @@ export default function CustomerDashboard() {
                     <Heart className="w-7 h-7 text-orange-600" />
                     {t('dashboard.customer.myPets')}
                   </h2>
-                  <Link href="/customer/pets/add">
+                  <Link href="/customer/pets">
                     <Button className="bg-orange-600 hover:bg-orange-700">
                       {t('dashboard.customer.addPetPlus')}
                     </Button>
@@ -199,7 +214,7 @@ export default function CustomerDashboard() {
                 ) : (
                   <div className="text-center py-12 bg-gray-50 rounded-xl">
                     <p className="text-gray-500 mb-4">{t('dashboard.customer.noPets')}</p>
-                    <Link href="/customer/pets/add">
+                    <Link href="/customer/pets">
                       <Button className="bg-orange-600 hover:bg-orange-700">
                         {t('dashboard.customer.addPet')}
                       </Button>
